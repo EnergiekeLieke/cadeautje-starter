@@ -324,7 +324,7 @@ export default function Cadeautjes({ config, embed = false, preview = false, mar
           <Decor decor={opties.decor} kleuren={decorKleuren} />
           {!achtergrondAfbeelding && <Sfeer sfeer={opties.sfeer} kleuren={config.kleuren} plek="boven" />}
 
-          <header className="relative text-center mb-8">
+          <header className="relative z-10 text-center mb-8">
             {config.logoUrl && (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={config.logoUrl} alt="" className="mx-auto mb-3 w-auto max-w-full object-contain max-h-16 sm:max-h-20" />
@@ -355,7 +355,7 @@ export default function Cadeautjes({ config, embed = false, preview = false, mar
             )}
           </header>
 
-          <ol className="relative flex flex-wrap justify-center gap-x-3 gap-y-5 list-none p-0 m-0">
+          <ol className="relative z-10 flex flex-wrap justify-center gap-x-3 gap-y-3 sm:gap-y-5 list-none p-0 m-0">
             {lijst.map(({ nr, ...c }, index) => {
               // Kleurpatroon: elk cadeautje een andere tegelkleur, in volgorde
               const tegelNr = index % tegels.length;
@@ -404,7 +404,7 @@ export default function Cadeautjes({ config, embed = false, preview = false, mar
             })}
           </ol>
 
-          <div className="relative mt-8 min-h-[2rem] text-center">
+          <div className="relative z-10 mt-8 min-h-[2rem] text-center">
             {klaar && opties.opnieuwSpelen && (
               <button type="button" onClick={opnieuw} data-kleur="accent" className={KNOP_PILL}>{teksten.opnieuw}</button>
             )}
@@ -440,6 +440,7 @@ export default function Cadeautjes({ config, embed = false, preview = false, mar
               data-kleur="licht"
               className={`cad-vlak cad-popup ${heeftPopupAchtergrond(opties) ? `cad-popup-achtergrond${opties.popupAchtergrondTekst === 'licht' ? ' cad-popup-licht' : ''}` : ''} font-poptekst relative w-full max-w-md ${embed && zicht ? '' : 'max-h-[85vh]'} overflow-y-auto rounded-3xl border-4 border-goud bg-licht text-center shadow-2xl`}
             >
+              <div className="sticky top-0 z-10">
               <div data-kleur="secundair" className="cad-deel border-b-2 border-goud bg-secundair py-2 text-xs uppercase tracking-[0.25em] text-opsec">
                 ✦ Cadeautje {inhoud.nr} van {aantal} ✦
               </div>
@@ -452,6 +453,7 @@ export default function Cadeautjes({ config, embed = false, preview = false, mar
               >
                 ×
               </button>
+              </div>
 
               <div key={inhoud.nr} className="relative px-6 pb-4 pt-6 sm:px-8">
                 {SPATTERS.map((s, i) => (
@@ -469,7 +471,7 @@ export default function Cadeautjes({ config, embed = false, preview = false, mar
                     <CadeauIcoon naam={inhoudIcoon} className="h-11 w-11" />
                   </div>
                   <h2 data-kleur="primair" className="cad-deel cad-ptekst mt-4 font-popkop text-2xl font-bold text-primair">{inhoud.titel}</h2>
-                  {inhoud.tekst && <p data-kleur="tekst" className="cad-deel cad-ptekst mt-3 whitespace-pre-line leading-relaxed text-inkt">{inhoud.tekst}</p>}
+                  {inhoud.tekst && <p data-kleur="tekst" className={`cad-deel cad-ptekst mt-3 whitespace-pre-line leading-relaxed text-inkt ${inhoud.tekst.length > 180 ? 'text-left' : ''}`}>{inhoud.tekst}</p>}
                   {inhoud.afbeelding && (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={inhoud.afbeelding} alt="" className="mx-auto mt-4 max-h-56 w-auto max-w-full rounded-xl object-cover" />

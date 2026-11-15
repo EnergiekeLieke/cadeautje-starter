@@ -1,5 +1,5 @@
 // De prompt die een ondernemer in Claude plakt om de inhoud van de cadeautjes te laten schrijven.
-// Het resultaat is JSON die in /beheer onder "Importeren en exporteren" past.
+// Het resultaat is JSON die in /beheer onder "Importeren" past.
 
 export const PROMPT_TEKSTEN = `Ik maak een digitale cadeautjespagina voor mijn klanten: een pagina met een paar ingepakte cadeautjes waarvan de bezoeker er een aantal mag openen. Schrijf de inhoud voor me en geef het resultaat als JSON.
 

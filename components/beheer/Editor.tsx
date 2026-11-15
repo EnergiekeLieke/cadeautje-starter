@@ -21,7 +21,7 @@ import type { OpslagModus } from '@/lib/opslag';
 import { PROMPT_TEKSTEN } from '@/lib/promptTeksten';
 import type { VersieInfo } from '@/lib/versie';
 
-const TABS = ['Algemeen', 'Kleuren en logo', 'Cadeautjes', 'Opties en teksten', 'Delen', 'Updates', 'Importeren en exporteren'] as const;
+const TABS = ['Algemeen', 'Thema en kleuren', 'Cadeautjes', 'Opties', 'Delen', 'Updates', 'Importeren'] as const;
 type Tab = (typeof TABS)[number];
 
 // Bij aanwijzen of selecteren van een kleurveld lichten in het voorbeeld de onderdelen met die kleur op (zie `markeer` in de pagina)
@@ -494,11 +494,12 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
   return (
     <div className="mx-auto max-w-7xl px-4 py-6">
       <EigenLettertypeStijl eigen={config.eigenLettertype} eigen2={config.eigenLettertype2} />
-      <header className="mb-4 flex flex-wrap items-center gap-3">
-        <h1 className="mr-auto text-2xl font-bold">Beheer van je cadeautjespagina</h1>
-        <a href="/" target="_blank" rel="noopener noreferrer" className={KNOP}>Bekijk de pagina</a>
-        <button type="button" onClick={vraagUitloggen} className={KNOP}>Uitloggen</button>
-        <button type="button" onClick={bewaar} disabled={bezig || !gewijzigd || !controle.ok} className={KNOP_PRIMAIR}>
+      <header className="sticky top-0 z-30 -mx-4 mb-4 flex items-center gap-2 border-b border-slate-200 bg-white/95 px-4 py-2.5 backdrop-blur sm:gap-3">
+        <h1 className="mr-auto min-w-0 truncate text-lg font-bold sm:text-2xl"><span className="sm:hidden">Beheer</span><span className="hidden sm:inline">Beheer van je cadeautjes</span></h1>
+        {gewijzigd && <span className="hidden whitespace-nowrap text-xs font-medium text-amber-700 sm:inline" role="status">Nog niet opgeslagen</span>}
+        <a href="/" target="_blank" rel="noopener noreferrer" className={`${KNOP} hidden whitespace-nowrap sm:inline-block`}>Bekijk de pagina</a>
+        <button type="button" onClick={vraagUitloggen} className={`${KNOP} whitespace-nowrap`}>Uitloggen</button>
+        <button type="button" onClick={bewaar} disabled={bezig || !gewijzigd || !controle.ok} className={`${KNOP_PRIMAIR} whitespace-nowrap`}>
           {bezig ? 'Opslaan...' : gewijzigd ? 'Opslaan' : 'Opgeslagen'}
         </button>
       </header>
@@ -526,7 +527,7 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
       {modus === 'geen' && (
         <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900">
           Opslaan werkt nog niet, want er is geen Blob-opslag gekoppeld. Ga in Vercel naar Storage, kies Create en dan Blob, en deploy opnieuw.
-          Je kunt nu wel alles invullen en via &quot;Importeren en exporteren&quot; bewaren.
+          Je kunt nu wel alles invullen en via &quot;Importeren&quot; bewaren.
         </div>
       )}
       {modus === 'bestand' && (
@@ -550,9 +551,9 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
         </div>
       )}
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
         <section>
-          <div role="tablist" aria-label="Onderdelen" className="mb-4 flex flex-wrap gap-1 border-b border-slate-200">
+          <div role="tablist" aria-label="Onderdelen" className="mb-4 flex gap-0.5 overflow-x-auto overflow-y-hidden border-b border-slate-200 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {TABS.map((t, i) => (
               <button
                 key={t}
@@ -564,7 +565,7 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
                 tabIndex={tab === t ? 0 : -1}
                 onKeyDown={(e) => opTabToets(e, i)}
                 onClick={() => setTab(t)}
-                className={`-mb-px rounded-t-lg border px-3 py-2 text-sm font-medium ${tab === t ? 'border-slate-200 border-b-slate-50 bg-slate-50 text-emerald-800' : 'border-transparent text-slate-600 hover:text-slate-900'}`}
+                className={`-mb-px shrink-0 whitespace-nowrap rounded-t-lg border px-3 py-2 text-sm font-medium ${tab === t ? 'border-slate-200 border-b-slate-50 bg-slate-50 text-emerald-800' : 'border-transparent text-slate-600 hover:text-slate-900'}`}
               >
                 {t}
               </button>
@@ -642,7 +643,7 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
             </div>
           )}
 
-          {tab === 'Kleuren en logo' && (
+          {tab === 'Thema en kleuren' && (
             <div className="space-y-6">
               <div>
                 <p className="mb-1 text-sm font-medium">Kies een thema</p>
@@ -862,7 +863,7 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
             <div className="space-y-2">
               <p className="text-sm text-slate-600">
                 Klik een cadeautje open om te bepalen wat erin zit. Het aantal cadeautjes en hoeveel de bezoeker er mag openen stel je in bij &quot;Algemeen&quot;.
-                Wil je alle teksten door Claude laten schrijven? Kijk dan bij &quot;Importeren en exporteren&quot;.
+                Wil je alle teksten door Claude laten schrijven? Kijk dan bij &quot;Importeren&quot;.
               </p>
               {voorbeeldCadeautjes.length > 0 && (
                 <p className="rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900">
@@ -944,7 +945,7 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
             </div>
           )}
 
-          {tab === 'Opties en teksten' && (
+          {tab === 'Opties' && (
             <div className="space-y-6">
               <fieldset className="space-y-3">
                 <legend className="mb-1 text-sm font-medium">Wat gebeurt er op de pagina?</legend>
@@ -1050,7 +1051,7 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
 
           {tab === 'Updates' && <UpdatesTab versie={versie} opVersie={setVersie} gewijzigd={gewijzigd} bezig={bezig} kanOpslaan={controle.ok} opOpslaan={() => void bewaar()} />}
 
-          {tab === 'Importeren en exporteren' && (
+          {tab === 'Importeren' && (
             <div className="space-y-4">
               <div className="rounded-lg border border-slate-200 bg-white p-3 text-sm">
                 <p className="font-semibold">Teksten laten schrijven door Claude</p>
@@ -1097,7 +1098,7 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
           </div>
         </section>
 
-        <aside className="lg:sticky lg:top-4 lg:self-start">
+        <aside id="voorbeeld" className="scroll-mt-16 lg:sticky lg:top-20 lg:self-start">
           <div className="mb-2 flex flex-wrap items-center gap-3 text-sm">
             <span className="font-medium">Voorbeeld:</span>
             <button type="button" onClick={() => setPreviewTeller((t) => t + 1)} className={KNOP}>Opnieuw beginnen</button>
@@ -1116,6 +1117,7 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
         </aside>
       </div>
 
+      <a href="#voorbeeld" className="fixed bottom-4 right-4 z-30 rounded-full bg-emerald-700 px-4 py-2.5 text-sm font-semibold text-white shadow-lg lg:hidden">Bekijk voorbeeld</a>
       <p className="mt-8 text-center text-xs text-slate-400">Cadeautje-starter, versie {versie.huidig}</p>
     </div>
   );

@@ -10,7 +10,8 @@ const KOLOMMEN_BREED: Record<number, number> = { 1: 3, 2: 3, 3: 3, 4: 4, 5: 5, 6
 
 const MAX_KAARTBREEDTE = 896; // de kaart is nooit breder dan max-w-4xl
 const GAT_X = 12; // tussenruimte naast elkaar (gap-x-3)
-const GAT_Y = 20; // tussenruimte onder elkaar (gap-y-5)
+const GAT_Y_BREED = 20; // tussenruimte onder elkaar vanaf 640 px (sm:gap-y-5)
+const GAT_Y_SMAL = 12; // en op een telefoon (gap-y-3)
 const EMBED_RAND = 16; // ingebed staat er 8 px (p-2) om de kaart heen
 
 const begrens = (aantal: number) => Math.max(1, Math.min(10, Math.round(Number.isFinite(aantal) ? aantal : 5)));
@@ -50,7 +51,7 @@ function kaartHoogte(aantal: number, kaartBreedte: number, titel: string, titelG
   const delen = metDelen ? (breed ? 0 : 44) : 0;
 
   const titelH = titelHoogte(titel, titelGrootte / 100, kaartBreedte - marges, breed);
-  return vast + titelH + rijen * tegel + (rijen - 1) * GAT_Y + boven + onder + delen;
+  return vast + titelH + rijen * tegel + (rijen - 1) * (breed ? GAT_Y_BREED : GAT_Y_SMAL) + boven + onder + delen;
 }
 
 export interface Maat {

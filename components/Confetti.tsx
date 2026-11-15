@@ -57,5 +57,5 @@ export default function Confetti({ kleuren = CONFETTI_KLEUREN }: { kleuren?: rea
     };
   }, [kleuren]);
 
-  return <canvas ref={ref} aria-hidden className="fixed inset-0 z-50 pointer-events-none" />;
+  return <canvas ref={ref} aria-hidden className="fixed inset-0 z-[35] pointer-events-none" />;
 }
