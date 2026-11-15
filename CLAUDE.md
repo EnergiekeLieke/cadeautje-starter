@@ -27,7 +27,7 @@ De ondernemer past alles aan via `/beheer`. Meestal is er dus geen code nodig.
 - `components/CadeauIcoon.tsx`: de iconen. `components/Cadeaudoos.tsx`: de getekende doos (papier, lint, strik, deksel). `components/Sfeer.tsx`: de illustratie langs de rand van de kaart. `components/Decor.tsx`: zwevend decor.
 - `components/beheer/Editor.tsx`: de beheerpagina met live voorbeeld. `DelenTab.tsx`, `UpdatesTab.tsx` en `velden.tsx` horen erbij.
 - `app/globals.css`: animaties en stijlen (`.cad-*`).
-- `lib/embed.ts`: kolommen per aantal en het advies voor de iframe-hoogte. De kolommen horen bij `BREEDTE` in `Cadeautjes.tsx`: pas je het ene aan, pas dan ook het andere aan.
+- `lib/embed.ts`: kolommen per aantal en het advies voor de iframe-hoogte. De kolommen horen bij `BREEDTE` in `Cadeautjes.tsx`: pas je het ene aan, pas dan ook het andere aan. De vaste hoogtes zijn gemeten in de echte pagina (1 tot 10 cadeautjes, 360 tot 900 px): verander je marges, kop of tussenruimte, meet ze dan opnieuw.
 
 ### Opent-status
 

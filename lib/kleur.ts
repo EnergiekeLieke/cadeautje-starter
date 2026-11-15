@@ -43,14 +43,6 @@ export function meng(a: string, b: string, aandeel: number): string {
   return `rgb(${m(ar, br)} ${m(ag, bg)} ${m(ab, bb)})`;
 }
 
-/** Zoals `meng`, maar geeft een hex-kleur terug, zodat het resultaat opnieuw gemengd kan worden. */
-function mengHex(a: string, b: string, aandeel: number): string {
-  const [ar, ag, ab] = hexNaarRgb(a);
-  const [br, bg, bb] = hexNaarRgb(b);
-  const m = (x: number, y: number) => Math.round(x + (y - x) * aandeel).toString(16).padStart(2, '0');
-  return `#${m(ar, br)}${m(ag, bg)}${m(ab, bb)}`;
-}
-
 // Een adres in een CSS-url(): aanhalingstekens en schuine strepen achterstevoren kunnen de url niet uit zijn vak laten breken
 function cssUrl(adres: string): string {
   return `url("${adres.replace(/["\\\n\r]/g, (c) => encodeURIComponent(c))}")`;

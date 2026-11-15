@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import type { CadeautjeConfig } from '@/lib/config';
 import { INPUT, KNOP, Veld, type Bericht } from '@/components/beheer/velden';
 import { adviesIframeHoogte } from '@/lib/embed';
+import { heeftAchtergrondAfbeelding } from '@/lib/kleur';
 
 interface Props {
   config: CadeautjeConfig;
@@ -25,7 +26,9 @@ export default function DelenTab({ config, gewijzigd, voorbeeldCadeautjes, voorb
   useEffect(() => setOrigin(window.location.origin), []);
 
   // De pagina is hoger naarmate er meer cadeautjes zijn en naarmate het iframe breder is
-  const advies = adviesIframeHoogte(config.aantalCadeautjes, breedte, config.titel, config.titelGrootte, config.opties.delen);
+  // Met een eigen achtergrondafbeelding staat de illustratie langs de rand uit
+  const sfeer = heeftAchtergrondAfbeelding(config.opties) ? 'geen' : config.opties.sfeer;
+  const advies = adviesIframeHoogte(config.aantalCadeautjes, breedte, config.titel, config.titelGrootte, config.opties.delen, sfeer);
   const hoogte = hoogteInvoer ?? advies;
   const link = `${origin}/`;
   const titel = config.titel.replace(/"/g, '&quot;');

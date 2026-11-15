@@ -86,6 +86,7 @@ export default function Cadeautjes({ config, embed = false, preview = false, mar
   const [beweging, setBeweging] = useState(true);
   const [geopend, setGeopend] = useState<number[]>([]);
   const [actief, setActief] = useState<number | null>(null);
+  const [onthuld, setOnthuld] = useState(false);
   const [confettiKeys, setConfettiKeys] = useState<number[]>([]);
   const [melding, setMelding] = useState('');
   const [gekopieerd, setGekopieerd] = useState(false);
@@ -99,6 +100,8 @@ export default function Cadeautjes({ config, embed = false, preview = false, mar
   const kopieerTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const gepusht = useRef(false);
   const confettiTeller = useRef(0);
+  // Een keuze is net gedaan en de popup moet nog opengaan: de overige cadeautjes onthullen we pas daarna
+  const popupKomt = useRef(false);
 
   const { opties } = config;
   const aantal = config.aantalCadeautjes;
@@ -116,13 +119,27 @@ export default function Cadeautjes({ config, embed = false, preview = false, mar
   // Alleen cadeautjes die er nog zijn tellen mee (de beheerder kan er in het voorbeeld een weghalen)
   const gekozen = useMemo(() => geopend.filter((nr) => nr <= aantal), [geopend, aantal]);
   const klaar = gekozen.length >= config.aantalKiezen;
-  // Na de laatste keuze kunnen de overige cadeautjes ook open, zodra de popup dicht is
-  const onthul = klaar && opties.restOnthullen && actief === null;
-  const isOpen = useCallback((nr: number) => gekozen.includes(nr) || onthul, [gekozen, onthul]);
+  // Na de laatste keuze kunnen de overige cadeautjes ook open, zodra de popup dicht is. Daarna blijven ze open,
+  // ook als de bezoeker een cadeautje nog eens bekijkt.
+  useEffect(() => {
+    if (!klaar || !opties.restOnthullen) setOnthuld(false);
+    else if (actief === null && !popupKomt.current) setOnthuld(true);
+  }, [klaar, opties.restOnthullen, actief]);
+  const isOpen = useCallback((nr: number) => gekozen.includes(nr) || onthuld, [gekozen, onthuld]);
 
   // Het geheugen van de browser lezen. Dit gebeurt pas na het laden van de pagina, zodat server en browser hetzelfde tekenen.
   useEffect(() => {
     setGeopend(preview ? [] : leesOpslag(sleutel));
+  }, [sleutel, preview]);
+
+  // Staat de pagina in twee tabbladen open, dan hoort een keuze in het ene tabblad ook in het andere te gelden
+  useEffect(() => {
+    if (preview) return;
+    const opOpslag = (e: StorageEvent) => {
+      if (e.key === sleutel || e.key === null) setGeopend(leesOpslag(sleutel));
+    };
+    window.addEventListener('storage', opOpslag);
+    return () => window.removeEventListener('storage', opOpslag);
   }, [sleutel, preview]);
 
   useEffect(() => {
@@ -173,6 +190,7 @@ export default function Cadeautjes({ config, embed = false, preview = false, mar
       window.history.pushState({ cad: true }, '');
       gepusht.current = true;
     }
+    popupKomt.current = false;
     setActief(nr);
   }, [embed, meetZichtbaar]);
 
@@ -243,11 +261,19 @@ export default function Cadeautjes({ config, embed = false, preview = false, mar
       openPopup(nr);
       return;
     }
-    if (klaar) {
+    // Een ander tabblad kan intussen al hebben gekozen: kijk nog even in het geheugen van de browser
+    const bekend = preview ? gekozen : [...new Set([...gekozen, ...leesOpslag(sleutel).filter((n) => n <= aantal)])];
+    if (bekend.length !== gekozen.length) setGeopend(bekend);
+    if (bekend.includes(nr)) {
+      openPopup(nr);
+      return;
+    }
+    if (bekend.length >= config.aantalKiezen) {
       toonMelding(config.aantalKiezen === 1 ? 'Je hebt al een cadeautje gekozen.' : `Je hebt al ${config.aantalKiezen} cadeautjes gekozen.`);
       return;
     }
-    const nieuw = [...gekozen, nr];
+    const nieuw = [...bekend, nr];
+    popupKomt.current = true;
     setGeopend(nieuw);
     if (!preview) schrijfOpslag(sleutel, nieuw);
     if (beweging) confetti();
@@ -257,6 +283,8 @@ export default function Cadeautjes({ config, embed = false, preview = false, mar
   }
 
   function opnieuw() {
+    if (openTimer.current) clearTimeout(openTimer.current);
+    popupKomt.current = false;
     setGeopend([]);
     setActief(null);
     setMelding('');

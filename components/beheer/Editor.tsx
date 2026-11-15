@@ -255,7 +255,7 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
   // Gebruikt de pagina een eigen achtergrondafbeelding? Dan doet de achtergrondkleur niet mee.
   const achtergrondActief = heeftAchtergrondAfbeelding(config.opties);
   const popupActief = heeftPopupAchtergrond(config.opties);
-  const maten = achtergrondMaten(config.aantalCadeautjes);
+  const maten = achtergrondMaten(config.aantalCadeautjes, config.titel, config.titelGrootte);
   // Welke eigen lettertypes zijn geüpload? Alleen die staan in de keuzelijstjes.
   const eigenGebruik = EIGEN_LETTERTYPES.map((e) => ({ ...e, naam: config[e.sleutel].naam || LETTERTYPES[e.keuze].naam, aanwezig: Boolean(config[e.sleutel].normaal || config[e.sleutel].vet) }));
   const lijst = useMemo(() => cadeautjesVoor(config), [config]);
