@@ -2,13 +2,15 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import CadeauIcoon from '@/components/CadeauIcoon';
+import Cadeaudoos from '@/components/Cadeaudoos';
 import Confetti from '@/components/Confetti';
 import DeelKnop from '@/components/DeelKnop';
 import Decor from '@/components/Decor';
 import EigenLettertypeStijl from '@/components/EigenLettertypeStijl';
+import Sfeer, { heeftBovenkant, heeftOnderkant } from '@/components/Sfeer';
 import { cadeautjesVoor, icoonVoor, type CadeautjeConfig } from '@/lib/config';
 import { kopieerNaarKlembord } from '@/lib/delen';
-import { confettiKleuren, cssVariabelen, heeftAchtergrondAfbeelding, heeftPopupAchtergrond, tegelKleuren } from '@/lib/kleur';
+import { confettiKleuren, cssVariabelen, heeftAchtergrondAfbeelding, heeftPopupAchtergrond, leesbaar, tegelKleuren } from '@/lib/kleur';
 import { kiesTekst, knopTeksten } from '@/lib/teksten';
 
 const SPATTERS = [
@@ -56,40 +58,6 @@ function schrijfOpslag(sleutel: string, lijst: number[]) {
   } catch {
     // Zonder opslag onthoudt de pagina niets, dat is prima
   }
-}
-
-// De versiering bovenop (strik, ster) heet "deksel": die vliegt eraf als het cadeautje opengaat
-function Strik() {
-  return (
-    <svg viewBox="0 0 40 24" aria-hidden className="cad-deksel pointer-events-none absolute left-1/2 top-0 w-[46%] -translate-x-1/2 -translate-y-[45%] text-goud drop-shadow">
-      <path d="M20 14C14 2 3 4 6 11c2 4 9 3 14 3zM20 14c6-12 17-10 14-3-2 4-9 3-14 3z" fill="currentColor" stroke="rgba(0,0,0,0.35)" strokeWidth="0.8" />
-      <circle cx="20" cy="14" r="3.2" fill="currentColor" stroke="rgba(0,0,0,0.35)" strokeWidth="0.8" />
-    </svg>
-  );
-}
-
-function Sterretje() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden className="cad-deksel pointer-events-none absolute left-1/2 top-0 w-[30%] -translate-x-1/2 -translate-y-[40%] text-goud drop-shadow">
-      <path d="M12 2.8l2.8 5.9 6.4.9-4.7 4.5 1.2 6.4L12 17.3l-5.7 3.2 1.2-6.4-4.7-4.5 6.4-.9z" fill="currentColor" stroke="rgba(0,0,0,0.35)" strokeWidth="0.7" />
-    </svg>
-  );
-}
-
-const GOUD = 'rgb(var(--cad-goud))';
-
-// Het hele lint: over de volle hoogte en breedte van het cadeautje
-function Lint() {
-  return (
-    <span
-      aria-hidden
-      className="pointer-events-none absolute inset-0 rounded-[inherit]"
-      style={{
-        background: `linear-gradient(${GOUD}, ${GOUD}) center / 14% 100% no-repeat, linear-gradient(${GOUD}, ${GOUD}) center / 100% 14% no-repeat`,
-        filter: 'drop-shadow(0 0 1px rgba(0,0,0,0.45))',
-      }}
-    />
-  );
 }
 
 // Het hangslotje voor cadeautjes die niet meer open mogen
@@ -141,6 +109,9 @@ export default function Cadeautjes({ config, embed = false, preview = false, mar
   const sleutel = useMemo(() => vingerafdruk(config), [config]);
   const teksten = knopTeksten(config);
   const achtergrondAfbeelding = heeftAchtergrondAfbeelding(opties);
+  const bovenSfeer = !achtergrondAfbeelding && heeftBovenkant(opties.sfeer);
+  const onderSfeer = !achtergrondAfbeelding && heeftOnderkant(opties.sfeer);
+  const decorKleuren = useMemo(() => [config.kleuren.accent, ...config.kleuren.tegels, config.kleuren.secundair], [config.kleuren]);
 
   // Alleen cadeautjes die er nog zijn tellen mee (de beheerder kan er in het voorbeeld een weghalen)
   const gekozen = useMemo(() => geopend.filter((nr) => nr <= aantal), [geopend, aantal]);
@@ -310,19 +281,22 @@ export default function Cadeautjes({ config, embed = false, preview = false, mar
 
   return (
     // Ingebed krijgt de pagina geen paginakleur en geen vaste minimale hoogte, zodat alleen de kaart zichtbaar is
-    <div style={variabelen} data-markeer={preview && markeer ? markeer : undefined} data-kleur="licht" className={`${embed ? 'relative p-2' : 'min-h-screen bg-licht px-3 sm:px-4 py-6'} cad-vlak`}>
+    <div style={variabelen} data-markeer={preview && markeer ? markeer : undefined} data-kleur="licht" className={`${embed ? 'relative p-2' : 'cad-pagina min-h-screen bg-licht px-3 sm:px-4 py-6 sm:py-10'} cad-vlak`}>
       <EigenLettertypeStijl eigen={config.eigenLettertype} eigen2={config.eigenLettertype2} />
       {embed && <div ref={zichtRef} aria-hidden className="pointer-events-none absolute inset-0" />}
       {confettiKeys.map((k) => <Confetti key={k} kleuren={confettiSet} />)}
 
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <div
           data-kleur="achtergrond"
-          className={`cad-vlak ${achtergrondAfbeelding ? 'cad-achtergrond' : ''} relative overflow-hidden bg-nacht border-2 border-goud/60 shadow-xl rounded-3xl px-3 sm:px-10 pt-8 pb-8`}
+          className={`cad-vlak ${achtergrondAfbeelding ? 'cad-achtergrond' : ''} relative overflow-hidden bg-nacht border-2 border-goud/60 shadow-2xl rounded-3xl px-3 sm:px-10 ${bovenSfeer ? 'pt-16 sm:pt-24' : 'pt-10'} ${onderSfeer ? 'pb-28 sm:pb-36' : 'pb-10'}`}
         >
-          <Decor decor={opties.decor} />
+          {/* Zachte gloed achter de cadeautjes */}
+          <span aria-hidden className="cad-gloed pointer-events-none absolute inset-0" />
+          <Decor decor={opties.decor} kleuren={decorKleuren} />
+          {!achtergrondAfbeelding && <Sfeer sfeer={opties.sfeer} kleuren={config.kleuren} plek="boven" />}
 
-          <header className="relative text-center mb-6">
+          <header className="relative text-center mb-8">
             {config.logoUrl && (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={config.logoUrl} alt="" className="mx-auto mb-3 w-auto max-w-full object-contain max-h-16 sm:max-h-20" />
@@ -335,7 +309,17 @@ export default function Cadeautjes({ config, embed = false, preview = false, mar
                 {config.ondertitel}
               </p>
             )}
-            <p className="mt-4 text-opach text-sm sm:text-base font-onder" aria-live="polite">{melding || kiezen}</p>
+            {/* Wat mag de bezoeker nog? Met bolletjes voor elk cadeautje dat hij mag openen */}
+            <div className="mt-5 flex justify-center">
+              <p className="inline-flex max-w-full items-center gap-3 rounded-full bg-opach/10 px-4 py-2 font-onder text-sm text-opach ring-1 ring-opach/20 sm:text-base" aria-live="polite">
+                <span className="flex shrink-0 gap-1.5" aria-hidden>
+                  {Array.from({ length: config.aantalKiezen }, (_, i) => (
+                    <span key={i} className={`block h-2.5 w-2.5 rounded-full transition-colors ${i < gekozen.length ? 'bg-goud' : 'ring-2 ring-goud/80'}`} />
+                  ))}
+                </span>
+                <span>{melding || kiezen}</span>
+              </p>
+            </div>
             {opties.delen && (
               <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
                 <DeelKnop titel={config.titel} sjabloon={opties.delenTekst} eigenLink={opties.delenUrl} className={KNOP_PILL} />
@@ -343,7 +327,7 @@ export default function Cadeautjes({ config, embed = false, preview = false, mar
             )}
           </header>
 
-          <ol className="relative flex flex-wrap justify-center gap-3 list-none p-0 m-0">
+          <ol className="relative flex flex-wrap justify-center gap-x-3 gap-y-5 list-none p-0 m-0">
             {lijst.map(({ nr, ...c }, index) => {
               // Kleurpatroon: elk cadeautje een andere tegelkleur, in volgorde
               const tegelNr = index % tegels.length;
@@ -364,33 +348,26 @@ export default function Cadeautjes({ config, embed = false, preview = false, mar
                       aria-disabled={gedimd}
                       className={`absolute inset-0 block w-full rounded-2xl focus-visible:outline-goud ${open ? 'cad-open' : ''} ${gedimd ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                     >
-                      {/* Binnenkant: glanzend met het icoon en de titel, zodat open nooit op een dicht cadeautje lijkt */}
-                      <span data-kleur="accent primair" className="cad-deel cad-binnen cad-doos flex flex-col items-center justify-center border-2 border-goud px-1 text-primair">
-                        <CadeauIcoon naam={icoon} className={`${open ? '' : 'invisible '}h-8 w-8 sm:h-12 sm:w-12`} />
-                        <span className={`${open ? '' : 'invisible '}mt-1 line-clamp-2 break-words text-center font-cadeau text-[10px] font-bold leading-tight sm:text-sm`}>
+                      {/* Binnenkant: een glanzend vlak met het icoon en de titel, zodat open nooit op een dicht cadeautje lijkt */}
+                      <span data-kleur="accent primair" className={`cad-deel cad-binnen cad-reveal absolute flex flex-col items-center justify-center border-2 border-goud text-primair ${opties.vorm === 'ei' ? 'inset-[4%] rounded-[50%_50%_46%_46%/58%_58%_42%_42%] px-3 pb-5 pt-2' : opties.vorm === 'koffer' ? 'inset-[3%] rounded-xl px-1.5' : 'inset-[3%] rounded-2xl px-1.5'}`}>
+                        <span className="cad-medaillon relative flex h-11 w-11 items-center justify-center rounded-full border-2 border-goud sm:h-16 sm:w-16">
+                          <CadeauIcoon naam={icoon} className="h-7 w-7 sm:h-10 sm:w-10" />
+                        </span>
+                        <span className="relative mt-1.5 line-clamp-2 break-words text-center font-cadeau text-[10px] font-bold leading-tight sm:mt-2 sm:text-sm">
                           {c.titel}
                         </span>
                       </span>
 
-                      {/* Dichte doos in de kleur van de tegel */}
-                      <span
-                        data-kleur={`tegel${tegelNr + 1} accent`}
-                        className="cad-deel cad-doos cad-doos-dicht border border-goud/80 shadow-md"
-                        style={{ backgroundColor: t.bg, color: t.tekst, transitionDelay: beweging && open ? `${index * 60}ms` : '0ms' }}
-                      >
-                        <span className="pointer-events-none absolute inset-1 rounded-xl border border-goud/40 sm:inset-1.5" />
-                        {opties.verpakking === 'lint' && <Lint />}
-                        <span className="absolute inset-0 flex items-center justify-center">
-                          <span
-                            className={opties.verpakking === 'lint' ? 'flex items-center justify-center rounded-lg p-1.5 sm:p-2' : 'contents'}
-                            style={opties.verpakking === 'lint' ? { backgroundColor: t.bg } : undefined}
-                          >
-                            <CadeauIcoon naam={icoon} className="relative h-9 w-9 sm:h-14 sm:w-14" />
-                          </span>
+                      {/* De dichte doos: inpakpapier in de kleur van de tegel, met lint en strik */}
+                      <span data-kleur={`tegel${tegelNr + 1} accent`} className="cad-deel cad-doos-dicht">
+                        <Cadeaudoos papierKleur={t.bg} detailKleur={t.tekst} lintKleur={config.kleuren.accent} papier={opties.papier} verpakking={opties.verpakking} vorm={opties.vorm} />
+                        <span
+                          className={`cad-chip absolute left-1/2 ${opties.vorm === 'ei' ? 'top-[62%]' : 'top-[68%]'} flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-licht p-1.5 shadow-md ring-2 ring-goud sm:p-2`}
+                          style={{ color: leesbaar(config.kleuren.licht, [t.bg, config.kleuren.primair, config.kleuren.tekst]) }}
+                        >
+                          <CadeauIcoon naam={icoon} className="h-4 w-4 sm:h-7 sm:w-7" />
                         </span>
-                        {opties.verpakking === 'strik' && <Strik />}
-                        {opties.verpakking === 'ster' && <Sterretje />}
-                        {gedimd && <span className="absolute bottom-1 right-1.5 opacity-70"><Slot /></span>}
+                        {gedimd && <span className="absolute bottom-[10%] right-[12%] text-licht opacity-90 drop-shadow"><Slot /></span>}
                       </span>
                     </button>
                   </div>
@@ -399,17 +376,19 @@ export default function Cadeautjes({ config, embed = false, preview = false, mar
             })}
           </ol>
 
-          <div className="relative mt-6 min-h-[3rem] text-center">
+          <div className="relative mt-8 min-h-[2rem] text-center">
             {klaar && opties.opnieuwSpelen && (
               <button type="button" onClick={opnieuw} data-kleur="accent" className={KNOP_PILL}>{teksten.opnieuw}</button>
             )}
             {config.footer && (
-              <p className="mt-4 text-opach/80 text-sm sm:text-base font-titel italic">
+              <p className="mt-4 text-opach/90 text-sm sm:text-base font-titel italic">
                 {config.footer}
                 <span className="block text-goud text-lg mt-1" aria-hidden>♥</span>
               </p>
             )}
           </div>
+
+          {!achtergrondAfbeelding && <Sfeer sfeer={opties.sfeer} kleuren={config.kleuren} plek="onder" />}
         </div>
       </div>
 

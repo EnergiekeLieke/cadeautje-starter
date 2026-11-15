@@ -4,7 +4,7 @@
 const KOLOMMEN_TELEFOON: Record<number, number> = { 1: 2, 2: 2, 3: 3, 4: 2, 5: 3, 6: 3, 7: 3, 8: 3, 9: 3, 10: 3 };
 const KOLOMMEN_BREED: Record<number, number> = { 1: 3, 2: 3, 3: 3, 4: 4, 5: 5, 6: 3, 7: 4, 8: 4, 9: 3, 10: 5 };
 
-const MAX_KAARTBREEDTE = 768; // de kaart is nooit breder dan max-w-3xl
+const MAX_KAARTBREEDTE = 896; // de kaart is nooit breder dan max-w-4xl
 const GAT = 12; // vaste tussenruimte tussen cadeautjes (gap-3)
 
 const begrens = (aantal: number) => Math.max(1, Math.min(10, Math.round(Number.isFinite(aantal) ? aantal : 5)));
@@ -28,7 +28,7 @@ export interface Maat {
   hoogte: number;
 }
 
-// Eigen achtergrondafbeelding: welke maat past bij jouw pagina? De kaart is 768 px breed op een computer en ongeveer 374 px op een telefoon.
+// Eigen achtergrondafbeelding: welke maat past bij jouw pagina? De kaart is 896 px breed op een computer en ongeveer 374 px op een telefoon.
 // De afbeelding wordt bijgesneden zodat hij de kaart helemaal vult. We rekenen twee keer zo groot, zodat hij ook op een scherm met veel pixels scherp blijft.
 function kaartHoogte(aantal: number, breed: boolean): number {
   const kaart = breed ? MAX_KAARTBREEDTE : 374;
@@ -43,7 +43,7 @@ const afronden = (n: number) => Math.round(n / 10) * 10;
 
 export function achtergrondMaten(aantalCadeautjes: number): { computer: Maat; telefoon: Maat } {
   return {
-    computer: { breedte: 1536, hoogte: afronden(2 * kaartHoogte(aantalCadeautjes, true)) },
+    computer: { breedte: 1792, hoogte: afronden(2 * kaartHoogte(aantalCadeautjes, true)) },
     telefoon: { breedte: 780, hoogte: afronden(2 * kaartHoogte(aantalCadeautjes, false)) },
   };
 }

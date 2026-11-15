@@ -10,9 +10,9 @@ import EigenLettertypeStijl from '@/components/EigenLettertypeStijl';
 import { BERICHT_CONFIG, BERICHT_KLAAR, BERICHT_MARKEER } from '@/components/CadeautjesPagina';
 import standaardConfig from '@/config/cadeautje.json';
 import {
-  cadeautjesVoor, DECOR_NAMEN, DECORS, ICONEN, ICOON_NAMEN, kleurenGelijkAanThema, LETTERTYPE_PLEKKEN, LETTERTYPES, lettertypeVoor, leesConfig,
+  cadeautjesVoor, DECOR_NAMEN, DECORS, ICONEN, PAPIER_NAMEN, PAPIEREN, VORM_NAMEN, VORMEN, SFEER_NAMEN, SFEREN, ICOON_NAMEN, kleurenGelijkAanThema, LETTERTYPE_PLEKKEN, LETTERTYPES, lettertypeVoor, leesConfig,
   MAX_CADEAUTJES, THEMAS, THEMA_SLEUTELS, VERPAKKING_NAMEN, VERPAKKINGEN,
-  type Cadeautje, type CadeautjeConfig, type Decor, type Lettertype, type LettertypePlek, type ThemaNaam, type Verpakking,
+  type Cadeautje, type CadeautjeConfig, type Decor, type Papier, type Sfeer, type Vorm, type Lettertype, type LettertypePlek, type ThemaNaam, type Verpakking,
 } from '@/lib/config';
 import { deelBericht, deelTekst, STANDAARD_DEELTEKST } from '@/lib/delen';
 import { achtergrondMaten, POPUP_ACHTERGROND_MAAT } from '@/lib/embed';
@@ -326,7 +326,7 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
     setConfig((c) => ({ ...c, kleuren: { ...c.kleuren, tegels: c.kleuren.tegels.map((t, j) => (j === i ? hex : t)) } }));
   }
 
-  // Een thema zet de kleuren, het decor en de verpakking. De titel en ondertitel veranderen alleen mee als je ze nog niet zelf hebt aangepast.
+  // Een thema zet de kleuren, het decor, de verpakking, het inpakpapier en de illustratie. De titel en ondertitel veranderen alleen mee als je ze nog niet zelf hebt aangepast.
   function kiesThema(naam: ThemaNaam) {
     const nieuw = THEMAS[naam];
     setConfig((c) => {
@@ -337,7 +337,7 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
         titel: c.titel === oud.titel || c.titel === standaardConfig.titel ? nieuw.titel : c.titel,
         ondertitel: c.ondertitel === oud.ondertitel || c.ondertitel === standaardConfig.ondertitel ? nieuw.ondertitel : c.ondertitel,
         kleuren: { ...nieuw.kleuren, tegels: [...nieuw.kleuren.tegels] },
-        opties: { ...c.opties, decor: nieuw.decor, verpakking: nieuw.verpakking },
+        opties: { ...c.opties, decor: nieuw.decor, verpakking: nieuw.verpakking, papier: nieuw.papier, sfeer: nieuw.sfeer, vorm: nieuw.vorm },
       };
     });
   }
@@ -761,7 +761,7 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
                 <div className="space-y-1 rounded-lg border border-sky-200 bg-sky-50 p-3 text-xs text-sky-950">
                   <p className="font-semibold">Zo maak je hem (voor jouw pagina met {config.aantalCadeautjes} cadeautjes)</p>
                   <ul className="ml-4 list-disc space-y-1">
-                    <li><strong>Computer en laptop</strong> (schermen vanaf 768 px breed): <strong>{maten.computer.breedte} × {maten.computer.hoogte} px</strong>. De pagina is dan 768 px breed en ongeveer {maten.computer.hoogte / 2} px hoog. Wij rekenen twee keer zo groot, zodat het ook op een scherm met veel pixels scherp blijft.</li>
+                    <li><strong>Computer en laptop</strong> (schermen vanaf 768 px breed): <strong>{maten.computer.breedte} × {maten.computer.hoogte} px</strong>. De pagina is dan 896 px breed en ongeveer {maten.computer.hoogte / 2} px hoog. Wij rekenen twee keer zo groot, zodat het ook op een scherm met veel pixels scherp blijft.</li>
                     <li><strong>Telefoon</strong>: <strong>{maten.telefoon.breedte} × {maten.telefoon.hoogte} px</strong>. De pagina is op een telefoon ongeveer 370 px breed. Let op: de pagina in je Kennis Shop-les is meestal smaller dan 768 px en laat dus ook de <strong>telefoonversie</strong> zien. Lever die dus zeker aan.</li>
                     <li>Heb je er maar één? Dan gebruikt de pagina die voor alle schermen. Past de verhouding niet precies, dan wordt de afbeelding bijgesneden en vult hij de pagina helemaal. Houd belangrijke dingen dus in het midden.</li>
                     <li>Verander je het aantal cadeautjes, dan verandert de hoogte van de pagina. Controleer dan de maat opnieuw.</li>
@@ -983,6 +983,21 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
                 <Veld label="Verpakking" hint="Zo ziet een dicht cadeautje eruit.">
                   <select className={INPUT} value={config.opties.verpakking} onChange={(e) => zetOptie('verpakking', e.target.value as Verpakking)}>
                     {VERPAKKINGEN.map((v) => <option key={v} value={v}>{VERPAKKING_NAMEN[v]}</option>)}
+                  </select>
+                </Veld>
+                <Veld label="Vorm van de cadeautjes" hint="Een doos met strik, een paasei dat openbreekt of een koffer die opengaat. Een thema kiest een passende vorm.">
+                  <select className={INPUT} value={config.opties.vorm} onChange={(e) => zetOptie('vorm', e.target.value as Vorm)}>
+                    {VORMEN.map((v) => <option key={v} value={v}>{VORM_NAMEN[v]}</option>)}
+                  </select>
+                </Veld>
+                <Veld label="Inpakpapier" hint="Het patroon op de cadeautjes, in de kleuren van je huisstijl.">
+                  <select className={INPUT} value={config.opties.papier} onChange={(e) => zetOptie('papier', e.target.value as Papier)}>
+                    {PAPIEREN.map((v) => <option key={v} value={v}>{PAPIER_NAMEN[v]}</option>)}
+                  </select>
+                </Veld>
+                <Veld label="Illustratie langs de rand" hint="Een tekening bovenaan of onderaan de kaart. Bij een eigen achtergrondafbeelding staat die uit.">
+                  <select className={INPUT} value={config.opties.sfeer} onChange={(e) => zetOptie('sfeer', e.target.value as Sfeer)}>
+                    {SFEREN.map((v) => <option key={v} value={v}>{SFEER_NAMEN[v]}</option>)}
                   </select>
                 </Veld>
               </div>

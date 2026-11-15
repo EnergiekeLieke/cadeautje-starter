@@ -51,6 +51,27 @@ export const VERPAKKING_NAMEN: Record<Verpakking, string> = {
   strik: 'Strik bovenop', lint: 'Lint rondom', ster: 'Ster bovenop', geen: 'Alleen het icoon',
 };
 
+// De vorm van het cadeautje: een doos met strik, een paasei dat openbreekt of een koffer die opengaat
+export const VORMEN = ['doos', 'ei', 'koffer'] as const;
+export type Vorm = (typeof VORMEN)[number];
+export const VORM_NAMEN: Record<Vorm, string> = { doos: 'Doos met strik', ei: 'Paasei', koffer: 'Koffer' };
+
+// Inpakpapier: het patroon op de doos
+export const PAPIEREN = ['stippen', 'strepen', 'sterren', 'hartjes', 'sneeuw', 'eitjes', 'golven', 'blaadjes', 'ruit', 'geen'] as const;
+export type Papier = (typeof PAPIEREN)[number];
+export const PAPIER_NAMEN: Record<Papier, string> = {
+  stippen: 'Stippen', strepen: 'Schuine strepen', sterren: 'Sterretjes', hartjes: 'Hartjes', sneeuw: 'Sneeuwvlokjes',
+  eitjes: 'Zigzag', golven: 'Golfjes', blaadjes: 'Blaadjes', ruit: 'Ruitjes', geen: 'Effen',
+};
+
+// Sfeer: de illustratie langs de rand van de kaart (vlaggetjes bovenaan, een landschap onderaan)
+export const SFEREN = ['vlaggetjes', 'dennen', 'daken', 'gras', 'golven', 'heuvels', 'geen'] as const;
+export type Sfeer = (typeof SFEREN)[number];
+export const SFEER_NAMEN: Record<Sfeer, string> = {
+  vlaggetjes: 'Vlaggetjes bovenaan', dennen: 'Besneeuwde dennen', daken: 'Daken met lichtjes', gras: 'Gras met bloemen',
+  golven: 'Zee met zon', heuvels: 'Zachte heuvels', geen: 'Geen illustratie',
+};
+
 // De iconen die op een cadeautje kunnen staan (getekend in components/CadeauIcoon.tsx)
 export const ICONEN = ['cadeau', 'ster', 'hart', 'ei', 'koffer', 'ballon', 'taart', 'pompoen', 'zon', 'bloem', 'boom', 'sneeuwvlok', 'blad', 'schoen'] as const;
 export type IcoonNaam = (typeof ICONEN)[number];
@@ -68,6 +89,8 @@ export const THEMAS = {
     naam: 'Verjaardag',
     omschrijving: 'Feestelijk paars met roze en geel, met ballonnen',
     decor: 'ballonnen', verpakking: 'strik', iconen: ['taart', 'ballon', 'cadeau', 'ster'],
+    papier: 'stippen', sfeer: 'vlaggetjes',
+    vorm: 'doos',
     titel: 'Kies jouw verjaardagscadeautje', ondertitel: 'Je mag er één uitkiezen. Wat zou erin zitten?',
     kleuren: {
       achtergrond: '#3b1d63', accent: '#ffc94d', licht: '#fff7e8',
@@ -79,6 +102,8 @@ export const THEMAS = {
     naam: 'Sinterklaas',
     omschrijving: 'Pakjesavond in rood, blauw en goud',
     decor: 'sterren', verpakking: 'strik', iconen: ['schoen', 'cadeau', 'ster', 'hart'],
+    papier: 'sterren', sfeer: 'daken',
+    vorm: 'doos',
     titel: 'Pakjesavond: kies een cadeautje', ondertitel: 'De Sint heeft iets voor je meegebracht.',
     kleuren: {
       achtergrond: '#8f1d22', accent: '#f0c75e', licht: '#fff3df',
@@ -90,6 +115,8 @@ export const THEMAS = {
     naam: 'Kerst',
     omschrijving: 'Klassiek donkergroen met goud en sneeuw',
     decor: 'sneeuw', verpakking: 'lint', iconen: ['boom', 'cadeau', 'ster', 'sneeuwvlok'],
+    papier: 'sneeuw', sfeer: 'dennen',
+    vorm: 'doos',
     titel: 'Een kerstcadeautje voor jou', ondertitel: 'Kies er een uit onder de boom.',
     kleuren: {
       achtergrond: '#1f3320', accent: '#c9a24b', licht: '#fcebdc',
@@ -101,6 +128,8 @@ export const THEMAS = {
     naam: 'Nieuwjaar',
     omschrijving: 'Middernachtblauw met goud en vuurwerk',
     decor: 'sterren', verpakking: 'ster', iconen: ['ster', 'ballon', 'cadeau'],
+    papier: 'stippen', sfeer: 'daken',
+    vorm: 'doos',
     titel: 'Een cadeautje voor het nieuwe jaar', ondertitel: 'Kies er een en begin goed.',
     kleuren: {
       achtergrond: '#0e1b3a', accent: '#f4d06f', licht: '#f4f1ea',
@@ -112,6 +141,8 @@ export const THEMAS = {
     naam: 'Valentijn',
     omschrijving: 'Romantisch wijnrood en roze met hartjes',
     decor: 'hartjes', verpakking: 'strik', iconen: ['hart', 'cadeau', 'ster'],
+    papier: 'hartjes', sfeer: 'heuvels',
+    vorm: 'doos',
     titel: 'Een cadeautje van hart tot hart', ondertitel: 'Kies er een om te openen.',
     kleuren: {
       achtergrond: '#5a0f2e', accent: '#ffb3c7', licht: '#fff0f3',
@@ -121,8 +152,10 @@ export const THEMAS = {
   },
   pasen: {
     naam: 'Pasen',
-    omschrijving: 'Zachte lentekleuren met paaseitjes en bloemen',
+    omschrijving: 'Zachte lentekleuren, met paaseieren die openbreken',
     decor: 'bloemen', verpakking: 'lint', iconen: ['ei', 'bloem', 'zon'],
+    papier: 'eitjes', sfeer: 'gras',
+    vorm: 'ei',
     titel: 'Zoek een paasei', ondertitel: 'Welk ei kies jij?',
     kleuren: {
       achtergrond: '#fdf3d8', accent: '#a3571a', licht: '#ffffff',
@@ -134,6 +167,8 @@ export const THEMAS = {
     naam: 'Moederdag en Vaderdag',
     omschrijving: 'Warm crème met saliegroen en roze',
     decor: 'bloemen', verpakking: 'strik', iconen: ['bloem', 'hart', 'cadeau'],
+    papier: 'blaadjes', sfeer: 'gras',
+    vorm: 'doos',
     titel: 'Een cadeautje om te bedanken', ondertitel: 'Kies er een uit.',
     kleuren: {
       achtergrond: '#f6efe6', accent: '#8f4f2f', licht: '#ffffff',
@@ -145,6 +180,8 @@ export const THEMAS = {
     naam: 'Zomer',
     omschrijving: 'Zonnig geel en turquoise',
     decor: 'zon', verpakking: 'lint', iconen: ['zon', 'bloem', 'ballon'],
+    papier: 'strepen', sfeer: 'heuvels',
+    vorm: 'doos',
     titel: 'Een zomers cadeautje', ondertitel: 'Kies er eentje en geniet.',
     kleuren: {
       achtergrond: '#fff1c9', accent: '#b8420f', licht: '#ffffff',
@@ -153,9 +190,11 @@ export const THEMAS = {
     },
   },
   vakantie: {
-    naam: 'Vakantiekoffers',
-    omschrijving: 'Zeeblauw, zon en koraal: kies een koffer',
+    naam: 'Vakantie',
+    omschrijving: 'Zeeblauw, zon en koraal, met koffers die opengaan',
     decor: 'zon', verpakking: 'lint', iconen: ['koffer', 'zon', 'bloem'],
+    papier: 'golven', sfeer: 'golven',
+    vorm: 'koffer',
     titel: 'Kies jouw vakantiekoffer', ondertitel: 'Wat zit er in jouw koffer?',
     kleuren: {
       achtergrond: '#0f4c6e', accent: '#ffd166', licht: '#fdf6e3',
@@ -167,6 +206,8 @@ export const THEMAS = {
     naam: 'Halloween',
     omschrijving: 'Donker paars met pompoenoranje',
     decor: 'bladeren', verpakking: 'ster', iconen: ['pompoen', 'ster', 'cadeau'],
+    papier: 'ruit', sfeer: 'daken',
+    vorm: 'doos',
     titel: 'Trick or treat?', ondertitel: 'Kies een cadeautje, als je durft.',
     kleuren: {
       achtergrond: '#1c1230', accent: '#ff9a1f', licht: '#fff1dc',
@@ -178,6 +219,8 @@ export const THEMAS = {
     naam: 'Bedankt',
     omschrijving: 'Rustig crème, petrol en terracotta, voor klanten en gasten',
     decor: 'geen', verpakking: 'lint', iconen: ['hart', 'cadeau', 'bloem'],
+    papier: 'ruit', sfeer: 'heuvels',
+    vorm: 'doos',
     titel: 'Bedankt! Kies een cadeautje', ondertitel: 'Als dank voor jouw vertrouwen.',
     kleuren: {
       achtergrond: '#f2efe8', accent: '#7d5f25', licht: '#ffffff',
@@ -189,6 +232,8 @@ export const THEMAS = {
     naam: 'Eigen huisstijl',
     omschrijving: 'Neutrale basis: zet zelf je kleuren, lettertypes, logo en achtergrond',
     decor: 'geen', verpakking: 'strik', iconen: ['cadeau'],
+    papier: 'stippen', sfeer: 'geen',
+    vorm: 'doos',
     titel: 'Kies een cadeautje', ondertitel: 'Je mag er een uitkiezen.',
     kleuren: {
       achtergrond: '#26324a', accent: '#e9b44c', licht: '#faf6ef',
@@ -242,6 +287,9 @@ const optiesSchema = z.object({
   // Confetti als een cadeautje opengaat
   confetti:    z.boolean().default(true),
   verpakking:  z.enum(VERPAKKINGEN, { error: 'Kies een van de beschikbare opties' }).default(basis.verpakking),
+  vorm:        z.enum(VORMEN, { error: 'Kies een van de beschikbare opties' }).default(basis.vorm),
+  papier:      z.enum(PAPIEREN, { error: 'Kies een van de beschikbare opties' }).default(basis.papier),
+  sfeer:       z.enum(SFEREN, { error: 'Kies een van de beschikbare opties' }).default(basis.sfeer),
   // Dichte cadeautjes bewegen zachtjes, om uit te nodigen tot klikken
   schudden:    z.boolean().default(true),
   // Na de laatste keuze mag de bezoeker opnieuw beginnen (met de knop onder de cadeautjes)
@@ -370,7 +418,7 @@ const VELDNAMEN: Record<string, string> = {
   achtergrond: 'achtergrondkleur', accent: 'accentkleur', licht: 'lichte kleur', primair: 'primaire kleur',
   secundair: 'secundaire kleur', lettertype: 'lettertype', cadeautjes: 'cadeautjes', opties: 'opties',
   knoppen: 'knoppen', standaardLabel: 'standaard knoptekst', openen: 'openen', aan: 'aan',
-  decor: 'decor', confetti: 'confetti', verpakking: 'verpakking', schudden: 'schudden',
+  decor: 'decor', vorm: 'vorm van de cadeautjes', papier: 'inpakpapier', sfeer: 'illustratie', confetti: 'confetti', verpakking: 'verpakking', schudden: 'schudden',
   opnieuwSpelen: 'opnieuw spelen', restOnthullen: 'rest onthullen', delen: 'knop om te delen',
   delenTekst: 'tekst bij het delen', delenUrl: 'link bij het delen',
   popupAchtergrond: 'achtergrond van het cadeautje', popupAchtergrondTekst: 'tekstkleur in het cadeautje',

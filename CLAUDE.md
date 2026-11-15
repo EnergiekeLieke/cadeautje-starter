@@ -24,7 +24,7 @@ De ondernemer past alles aan via `/beheer`. Meestal is er dus geen code nodig.
 - `lib/teksten.ts`: standaardteksten op de pagina, met `{aantal}` en `{over}` in eigen teksten (`config.teksten`).
 - `lib/opslag.ts`, `lib/blobKeuze.ts`, `lib/configLaden.ts`: bewaren en lezen. Blob in productie (naam met willekeurig stuk, `cadeautje/config-xxxx.json`), een lokaal bestand tijdens `npm run dev`. Val nooit stilzwijgend terug op de voorbeeldtekst als er Blob is gekoppeld, want de editor kan die dan over de echte teksten heen opslaan.
 - `components/Cadeautjes.tsx`: de pagina zelf (cadeautjes, popup, opent-status). `components/CadeautjesPagina.tsx` is de wrapper die in het voorbeeld de live instellingen van de editor ontvangt via postMessage (`cadeautje-config`).
-- `components/CadeauIcoon.tsx`: de iconen. `components/Decor.tsx`: zwevend decor.
+- `components/CadeauIcoon.tsx`: de iconen. `components/Cadeaudoos.tsx`: de getekende doos (papier, lint, strik, deksel). `components/Sfeer.tsx`: de illustratie langs de rand van de kaart. `components/Decor.tsx`: zwevend decor.
 - `components/beheer/Editor.tsx`: de beheerpagina met live voorbeeld. `DelenTab.tsx`, `UpdatesTab.tsx` en `velden.tsx` horen erbij.
 - `app/globals.css`: animaties en stijlen (`.cad-*`).
 - `lib/embed.ts`: kolommen per aantal en het advies voor de iframe-hoogte. De kolommen horen bij `BREEDTE` in `Cadeautjes.tsx`: pas je het ene aan, pas dan ook het andere aan.
