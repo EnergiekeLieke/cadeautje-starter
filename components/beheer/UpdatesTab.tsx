@@ -1,0 +1,189 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { KNOP, KNOP_PRIMAIR, type Bericht } from '@/components/beheer/velden';
+import type { VersieInfo } from '@/lib/versie';
+
+const WORKFLOW_PAD = '.github/workflows/update-van-template.yml';
+
+interface Props {
+  versie: VersieInfo;
+  /** Zet nieuwe versie-informatie in de editor (na Zoek naar updates) */
+  opVersie: (versie: VersieInfo) => void;
+  /** Zijn er wijzigingen die nog niet zijn opgeslagen? */
+  gewijzigd: boolean;
+  bezig: boolean;
+  /** Kunnen de wijzigingen nu worden opgeslagen (geen foutmeldingen)? */
+  kanOpslaan: boolean;
+  opOpslaan: () => void;
+}
+
+export default function UpdatesTab({ versie, opVersie, gewijzigd, bezig, kanOpslaan, opOpslaan }: Props) {
+  const [workflow, setWorkflow] = useState<string | null>(null);
+  const [laden, setLaden] = useState(true);
+  const [bericht, setBericht] = useState<Bericht>(null);
+  const [zoekt, setZoekt] = useState(false);
+  const [zoekBericht, setZoekBericht] = useState<Bericht>(null);
+
+  // De tekst van de update-knop halen we bij de template zelf op, zodat hij altijd de nieuwste is
+  useEffect(() => {
+    let weg = false;
+    fetch(versie.workflowUrl)
+      .then((res) => (res.ok ? res.text() : null))
+      .then((tekst) => { if (!weg) setWorkflow(tekst); })
+      .catch(() => { if (!weg) setWorkflow(null); })
+      .finally(() => { if (!weg) setLaden(false); });
+    return () => { weg = true; };
+  }, [versie.workflowUrl]);
+
+  const repo = versie.repo;
+  const repoUrl = repo ? `https://github.com/${repo.eigenaar}/${repo.naam}` : null;
+  // GitHub opent met deze link een nieuw bestand waarin de naam en de inhoud al zijn ingevuld
+  const installeerUrl = repoUrl && workflow ? `${repoUrl}/new/main?filename=${WORKFLOW_PAD}&value=${encodeURIComponent(workflow)}` : null;
+  const startUrl = repoUrl ? `${repoUrl}/actions/workflows/update-van-template.yml` : null;
+
+  async function kopieer() {
+    if (!workflow) return;
+    try {
+      await navigator.clipboard.writeText(workflow);
+      setBericht({ soort: 'ok', regels: ['De tekst staat op je klembord. Plak hem in het nieuwe bestand op GitHub.'] });
+    } catch {
+      setBericht({ soort: 'fout', regels: ['Kopiëren lukt niet in deze browser. Open de tekst via de link hieronder en kopieer hem zelf.'] });
+    }
+  }
+
+  async function zoekUpdates() {
+    setZoekt(true);
+    setZoekBericht(null);
+    try {
+      const res = await fetch('/api/beheer/versie');
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data) throw new Error(data?.fout ?? 'mislukt');
+      opVersie(data as VersieInfo);
+      setZoekBericht({
+        soort: 'ok',
+        regels: [(data as VersieInfo).nieuwste ? `Er is een nieuwe versie: ${(data as VersieInfo).nieuwste}.` : 'Je gebruikt de nieuwste versie.'],
+      });
+    } catch {
+      setZoekBericht({ soort: 'fout', regels: ['Zoeken naar updates lukt nu niet. Probeer het over een paar minuten nog eens.'] });
+    }
+    setZoekt(false);
+  }
+
+  return (
+    <div className="space-y-6">
+      <section className="rounded-lg border border-slate-200 bg-white p-3 text-sm">
+        <p>
+          Je gebruikt versie <strong>{versie.huidig}</strong>.{' '}
+          {versie.nieuwste ? (
+            <>Er is een nieuwe versie: <strong>{versie.nieuwste}</strong>.</>
+          ) : (
+            'Er is geen nieuwere versie gevonden.'
+          )}
+        </p>
+        <div className="mt-2 flex flex-wrap items-center gap-3">
+          <button type="button" onClick={zoekUpdates} disabled={zoekt} className={KNOP}>{zoekt ? 'Zoeken...' : 'Zoek naar updates'}</button>
+          {zoekBericht && (
+            <span role={zoekBericht.soort === 'fout' ? 'alert' : 'status'} className={`text-sm ${zoekBericht.soort === 'ok' ? 'text-emerald-800' : 'text-red-800'}`}>
+              {zoekBericht.regels.join(' ')}
+            </span>
+          )}
+        </div>
+        <p className="mt-1 text-xs text-slate-500">
+          Een update vervangt alleen de code van je pagina. Je teksten, kleuren en logo staan in je eigen opslag en blijven bewaard.
+        </p>
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="text-sm font-semibold">Start de update</h2>
+        <ol start={0} className="ml-5 list-decimal space-y-1 text-sm text-slate-700">
+          <li>
+            <strong>Sla eerst op wat je tot nu toe hebt gebouwd.</strong> Na de update ververs je deze pagina, en wijzigingen die je nog niet hebt opgeslagen zijn dan weg.
+            {gewijzigd ? (
+              <span className="mt-2 flex flex-wrap items-center gap-3 rounded-lg border border-amber-300 bg-amber-50 p-2 text-amber-950">
+                <span className="flex-1">
+                  {kanOpslaan ? 'Je hebt wijzigingen die nog niet zijn opgeslagen.' : 'Je hebt wijzigingen die nog niet zijn opgeslagen, maar opslaan kan pas als je de melding bovenaan de pagina hebt opgelost.'}
+                </span>
+                <button type="button" onClick={opOpslaan} disabled={bezig || !kanOpslaan} className={KNOP_PRIMAIR}>{bezig ? 'Opslaan...' : 'Nu opslaan'}</button>
+              </span>
+            ) : (
+              <span className="mt-1 block text-emerald-800">Alles is opgeslagen, je kunt verder.</span>
+            )}
+          </li>
+          <li>Klik op de knop hieronder. Je komt op GitHub bij <strong>Update van de template</strong>.</li>
+          <li>Klik rechts op <strong>Run workflow</strong> en daarna op de groene knop <strong>Run workflow</strong>. Laat het vak &quot;Versie&quot; leeg om de nieuwste te krijgen.</li>
+          <li>Wacht tot de run een groen vinkje heeft (ongeveer een halve minuut). Open de run om te zien wat er is veranderd.</li>
+          <li>Vercel zet de nieuwe versie daarna vanzelf online, dat duurt ongeveer 1 tot 2 minuten. Ververs daarna deze pagina in je browser.</li>
+        </ol>
+        {startUrl ? (
+          <a href={startUrl} target="_blank" rel="noopener noreferrer" className={`${KNOP_PRIMAIR} inline-block`}>Naar de update-knop op GitHub</a>
+        ) : (
+          <p className="text-xs text-slate-500">Open je repo op GitHub, ga naar <strong>Actions</strong> en kies <strong>Update van de template</strong>.</p>
+        )}
+        <p className="text-xs text-slate-500">
+          Zie je bij Actions een melding dat workflows uit staan? Klik dan op de groene knop om ze aan te zetten.
+          Heb je zelf code in je repo aangepast? De update vervangt die bestanden en laat in het resultaat zien welke dat waren.
+        </p>
+      </section>
+
+      <details className="rounded-lg border border-slate-200 bg-white p-3">
+        <summary className="cursor-pointer text-sm font-semibold">Heb je de update-knop nog niet? Zet hem hier neer (eenmalig)</summary>
+        <div className="mt-3 space-y-3">
+          <p className="text-sm text-slate-700">
+            Zie je op GitHub geen <strong>Update van de template</strong> bij Actions, of krijg je een pagina die niet bestaat (404)? Dan staat de update-knop nog niet in je repo.
+            Dat gebeurt als je bent gestart met de Deploy-knop van Vercel, want die kopieert hem niet mee. Je zet hem één keer zelf neer, en dat gaat met één klik.
+          </p>
+          <p className="rounded-lg border border-amber-300 bg-amber-50 p-2 text-sm text-amber-900">
+            Krijg je op GitHub de melding <em>&quot;A file with the same name already exists&quot;</em>? Dan staat de update-knop er al. Je kunt deze stap overslaan en de update hierboven starten.
+          </p>
+          {installeerUrl ? (
+            <>
+              <a href={installeerUrl} target="_blank" rel="noopener noreferrer" className={`${KNOP} inline-block`}>
+                Installeer de update-knop op GitHub
+              </a>
+              <ol className="ml-5 list-decimal space-y-1 text-sm text-slate-700">
+                <li>GitHub opent een nieuw bestand. De naam en de inhoud zijn al ingevuld, daar hoef je niets aan te veranderen.</li>
+                <li>Klik rechtsboven op <strong>Commit changes...</strong> en daarna in het venster op de groene knop <strong>Commit changes</strong>.</li>
+                <li>Klaar. Start nu de update hierboven.</li>
+              </ol>
+            </>
+          ) : laden ? (
+            <p className="text-sm text-slate-500">Even kijken...</p>
+          ) : (
+            <div className="space-y-2 text-sm text-slate-700">
+              <p>
+                {repoUrl
+                  ? 'Ik kan de tekst van de update-knop nu niet ophalen. Je kunt hem ook zelf neerzetten:'
+                  : 'Ik weet niet in welke GitHub-repo je pagina staat. Je kunt de update-knop zelf neerzetten:'}
+              </p>
+              <ol className="ml-5 list-decimal space-y-1">
+                <li>Open je repo op GitHub, klik op <strong>Add file</strong> en dan op <strong>Create new file</strong>.</li>
+                <li>Typ als naam <code className="font-mono text-xs">{WORKFLOW_PAD}</code>. Typ de schuine strepen gewoon mee, GitHub maakt de mappen vanzelf.</li>
+                <li>Plak de tekst van <a className="underline" href={versie.workflowUrl} target="_blank" rel="noopener noreferrer">dit bestand</a> in het grote vak en klik op <strong>Commit changes</strong>.</li>
+              </ol>
+            </div>
+          )}
+          {workflow && (
+            <button type="button" onClick={kopieer} className={KNOP}>Kopieer de tekst van de update-knop</button>
+          )}
+          {bericht && (
+            <div
+              role={bericht.soort === 'fout' ? 'alert' : 'status'}
+              className={`rounded-lg border p-3 text-sm ${bericht.soort === 'ok' ? 'border-emerald-300 bg-emerald-50 text-emerald-900' : 'border-red-300 bg-red-50 text-red-900'}`}
+            >
+              {bericht.regels.map((r) => <p key={r}>{r}</p>)}
+            </div>
+          )}
+        </div>
+      </details>
+
+      <section className="space-y-1 text-sm text-slate-700">
+        <h2 className="text-sm font-semibold">Liever met Claude Code of de terminal?</h2>
+        <p>
+          Heb je een kopie van je repo op je computer? Dan draai je <code className="font-mono text-xs">npm run update</code>. Daarna sla je de wijzigingen zelf op met git
+          (<code className="font-mono text-xs">git add -A</code>, <code className="font-mono text-xs">git commit</code> en <code className="font-mono text-xs">git push</code>).
+        </p>
+      </section>
+    </div>
+  );
+}

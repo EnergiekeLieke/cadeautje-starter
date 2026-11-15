@@ -1,0 +1,18 @@
+node_modules
+.next
+out
+.env
+.env.local
+.env*.local
+.vercel
+*.tsbuildinfo
+.cadeautje-config.local.json
+
+# Cursusmateriaal: blijft lokaal en gaat niet mee naar GitHub
+cursus/
+
+# Door Next gegenereerd, hoort niet in de repo
+next-env.d.ts
+
+# Lokaal geuploade lettertypes (alleen tijdens npm run dev)
+.cadeautje-uploads/

@@ -1,0 +1,253 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: system-ui, 'Segoe UI', Roboto, Arial, sans-serif;
+}
+
+h1, h2, h3 {
+  font-family: var(--cad-font-titel, Georgia, serif);
+}
+
+:focus-visible {
+  outline: 2px solid rgb(var(--cad-goud, 201 162 75));
+  outline-offset: 3px;
+}
+
+/* ─── Cadeautjes ───────────────────────────────────────────────
+   Alle kleuren komen uit CSS-variabelen (zie lib/kleur.ts), zodat ze via /beheer aan te passen zijn. */
+
+/* Eigen achtergrondafbeelding: de computerversie vanaf 768 px breed, anders de telefoonversie. Is er maar een, dan geldt die voor alle schermen. */
+/* De laag over de afbeelding zit in dezelfde achtergrond, zodat hij bij elk onderdeel van de kaart onder de tekst ligt. */
+.cad-achtergrond {
+  background-image:
+    linear-gradient(rgb(var(--cad-laag-kleur) / var(--cad-laag)), rgb(var(--cad-laag-kleur) / var(--cad-laag))),
+    var(--cad-bg-mob, var(--cad-bg-pc));
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+@media (min-width: 768px) {
+  .cad-achtergrond {
+    background-image:
+      linear-gradient(rgb(var(--cad-laag-kleur) / var(--cad-laag)), rgb(var(--cad-laag-kleur) / var(--cad-laag))),
+      var(--cad-bg-pc, var(--cad-bg-mob));
+  }
+}
+
+/* Eigen achtergrond van het geopende cadeautje. De laag over de afbeelding zit in dezelfde achtergrond, zodat hij blijft staan als de tekst scrolt. */
+.cad-popup-achtergrond {
+  background-color: rgb(var(--cad-popup-reserve));
+  background-image:
+    linear-gradient(rgb(var(--cad-popup-laag-kleur) / var(--cad-popup-laag)), rgb(var(--cad-popup-laag-kleur) / var(--cad-popup-laag))),
+    var(--cad-popup-bg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.cad-popup-achtergrond.cad-popup-licht .cad-ptekst {
+  color: rgb(var(--cad-popup-tekst));
+}
+
+/* De titel schaalt mee met de instelling Grootte van de titel (standaard 100%) */
+.cad-titel {
+  font-size: calc(1.875rem * var(--cad-titel-schaal, 1));
+  /* Een lang woord in een grote titel wordt afgebroken in plaats van buiten de kaart te vallen */
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+@media (min-width: 640px) {
+  .cad-titel {
+    font-size: calc(3rem * var(--cad-titel-schaal, 1));
+  }
+}
+
+.cad-goudtekst {
+  /* --cad-goud-donker en --cad-goud-licht komen uit lib/kleur.ts: op een lichte achtergrond wordt de glans donkerder in plaats van lichter */
+  background: linear-gradient(
+    100deg,
+    var(--cad-goud-donker) 0%,
+    var(--cad-goud-licht) 30%,
+    rgb(var(--cad-goud)) 50%,
+    var(--cad-goud-licht) 70%,
+    var(--cad-goud-donker) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: cad-goudtekst 6s linear infinite;
+}
+
+/* Een dicht cadeautje: een doosje met deksel. Bij openen vliegt het deksel eraf en wordt de binnenkant zichtbaar. */
+.cad-doos {
+  position: absolute;
+  inset: 0;
+  border-radius: 0.9rem;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.4s ease, filter 0.4s ease;
+}
+
+button:not([aria-disabled='true']):hover .cad-doos {
+  transform: translateY(-4px) scale(1.03);
+}
+
+.cad-schud {
+  animation: cad-schud 3.6s ease-in-out infinite;
+  animation-delay: var(--cad-vertraging, 0s);
+}
+
+/* Binnenkant van een geopend cadeautje: warm en glanzend, zodat open nooit op dicht lijkt */
+.cad-binnen {
+  background: radial-gradient(circle at 50% 35%, var(--cad-binnen-1) 0%, var(--cad-binnen-2) 55%, var(--cad-binnen-3) 100%);
+  box-shadow: inset 0 3px 10px rgba(60, 40, 0, 0.35), 0 0 10px rgb(var(--cad-goud) / 0.35);
+}
+
+.cad-medaillon {
+  background: radial-gradient(circle at 50% 35%, var(--cad-binnen-1) 0%, var(--cad-binnen-2) 60%, var(--cad-binnen-3) 100%);
+}
+
+.cad-deksel {
+  transform-origin: 20% 100%;
+  transition: transform 0.7s cubic-bezier(0.34, 1.4, 0.64, 1), opacity 0.5s ease 0.2s;
+}
+
+.cad-open .cad-deksel {
+  transform: translateY(-90%) rotate(-24deg);
+  opacity: 0;
+}
+
+.cad-open .cad-doos-dicht {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cad-gedimd {
+  opacity: 0.42;
+  filter: saturate(0.5);
+}
+
+.cad-popup {
+  animation: cad-popup 0.45s cubic-bezier(0.22, 0.8, 0.36, 1);
+}
+
+.cad-tekst {
+  animation: cad-tekst 0.55s 0.15s cubic-bezier(0.22, 0.8, 0.36, 1) both;
+}
+
+.cad-spat {
+  opacity: 0;
+  animation: cad-spat 1.5s ease-out forwards;
+}
+
+/* Zweevend decor: val (sneeuw, bladeren) of stijg (ballonnen, hartjes) */
+.cad-zweef {
+  position: absolute;
+  pointer-events: none;
+  will-change: transform;
+  animation: cad-zweef var(--cad-duur, 14s) linear infinite;
+  animation-delay: var(--cad-start, 0s);
+  opacity: 0;
+}
+
+.cad-zweef-op {
+  animation-name: cad-zweef-op;
+}
+
+.cad-zon {
+  position: absolute;
+  pointer-events: none;
+  animation: cad-zonnetje 7s ease-in-out infinite;
+  animation-delay: var(--cad-start, 0s);
+}
+
+.cad-twinkel {
+  animation: cad-twinkel 3s ease-in-out infinite;
+}
+
+@keyframes cad-schud {
+  0%, 82%, 100% { transform: rotate(0); }
+  86%           { transform: rotate(-3deg); }
+  90%           { transform: rotate(3deg); }
+  94%           { transform: rotate(-2deg); }
+  98%           { transform: rotate(1.5deg); }
+}
+
+@keyframes cad-zweef {
+  0%   { transform: translate3d(0, -10%, 0) rotate(0); opacity: 0; }
+  8%   { opacity: var(--cad-dekking, 0.7); }
+  92%  { opacity: var(--cad-dekking, 0.7); }
+  100% { transform: translate3d(var(--cad-drift, 20px), 110vh, 0) rotate(var(--cad-draai, 180deg)); opacity: 0; }
+}
+
+@keyframes cad-zweef-op {
+  0%   { transform: translate3d(0, 10%, 0) rotate(0); opacity: 0; }
+  8%   { opacity: var(--cad-dekking, 0.7); }
+  92%  { opacity: var(--cad-dekking, 0.7); }
+  100% { transform: translate3d(var(--cad-drift, 20px), -110vh, 0) rotate(var(--cad-draai, 20deg)); opacity: 0; }
+}
+
+@keyframes cad-zonnetje {
+  0%, 100% { transform: scale(0.9) rotate(0); opacity: 0.35; }
+  50%      { transform: scale(1.1) rotate(20deg); opacity: 0.85; }
+}
+
+@keyframes cad-twinkel {
+  0%, 100% { opacity: 0.25; transform: scale(0.8); }
+  50%      { opacity: 1; transform: scale(1.15); }
+}
+
+@keyframes cad-tekst {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cad-spat {
+  0%   { opacity: 0; transform: scale(0.2) translateY(6px); }
+  30%  { opacity: 1; transform: scale(1.2) translateY(0); }
+  100% { opacity: 0; transform: scale(0.8) translateY(-22px); }
+}
+
+@keyframes cad-goudtekst {
+  to { background-position: 200% center; }
+}
+
+@keyframes cad-popup {
+  from { opacity: 0; transform: translateY(16px) scale(0.94); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cad-doos, .cad-deksel { transition: none; }
+  .cad-schud, .cad-goudtekst, .cad-popup, .cad-tekst, .cad-twinkel, .cad-zon, .cad-zweef { animation: none; }
+  .cad-zweef, .cad-zon, .cad-spat { display: none; }
+  button:not([aria-disabled='true']):hover .cad-doos { transform: none; }
+}
+
+/* ─── Kleur aanwijzen in het voorbeeld van /beheer ─────────────
+   Wijs je in de editor een kleurveld aan, dan krijgt de pagina data-markeer="<kleur>". Onderdelen met dat kleurlabel
+   (data-kleur) lichten op, de rest wordt zacht. .cad-deel zijn losse onderdelen, .cad-vlak zijn grote vlakken waar andere
+   onderdelen in staan: die krijgen alleen een rand. Bezoekers krijgen dit nooit te zien, want data-markeer staat alleen in het voorbeeld. */
+[data-markeer] .cad-deel { filter: opacity(0.22) saturate(0.2); transition: filter 0.2s; }
+[data-markeer="achtergrond"] .cad-deel[data-kleur~="achtergrond"],
+[data-markeer="accent"] .cad-deel[data-kleur~="accent"],
+[data-markeer="licht"] .cad-deel[data-kleur~="licht"],
+[data-markeer="primair"] .cad-deel[data-kleur~="primair"],
+[data-markeer="secundair"] .cad-deel[data-kleur~="secundair"],
+[data-markeer="tekst"] .cad-deel[data-kleur~="tekst"],
+[data-markeer="tegel1"] .cad-deel[data-kleur~="tegel1"],
+[data-markeer="tegel2"] .cad-deel[data-kleur~="tegel2"],
+[data-markeer="tegel3"] .cad-deel[data-kleur~="tegel3"],
+[data-markeer="tegel4"] .cad-deel[data-kleur~="tegel4"] { filter: drop-shadow(0 0 2px #ff2d95) drop-shadow(0 0 6px #ff2d95); }
+[data-markeer="achtergrond"] .cad-vlak[data-kleur~="achtergrond"],
+[data-markeer="accent"] .cad-vlak[data-kleur~="accent"],
+[data-markeer="licht"] .cad-vlak[data-kleur~="licht"],
+[data-markeer="primair"] .cad-vlak[data-kleur~="primair"],
+[data-markeer="secundair"] .cad-vlak[data-kleur~="secundair"],
+[data-markeer="tekst"] .cad-vlak[data-kleur~="tekst"],
+.cad-vlak[data-markeer="achtergrond"][data-kleur~="achtergrond"],
+.cad-vlak[data-markeer="licht"][data-kleur~="licht"] { outline: 4px solid #ff2d95; outline-offset: -4px; }

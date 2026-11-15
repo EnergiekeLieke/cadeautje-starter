@@ -1,0 +1,59 @@
+{
+  "titel": "Kies jouw verjaardagscadeautje",
+  "ondertitel": "Je mag er één uitkiezen. Wat zou erin zitten?",
+  "footer": "Fijne dag gewenst!",
+  "logoUrl": "",
+  "thema": "verjaardag",
+  "aantalCadeautjes": 5,
+  "aantalKiezen": 1,
+  "opties": {
+    "decor": "ballonnen",
+    "confetti": true,
+    "verpakking": "strik",
+    "schudden": true,
+    "opnieuwSpelen": true,
+    "restOnthullen": false
+  },
+  "cadeautjes": [
+    {
+      "titel": "Een etentje op mijn kosten",
+      "tekst": "Kies een avond uit en ik trakteer. Jij mag de plek uitzoeken, ik zorg voor de rest.",
+      "icoon": "taart",
+      "knop": { "aan": false, "label": "", "url": "" },
+      "code": { "aan": false, "label": "", "waarde": "" },
+      "afbeelding": ""
+    },
+    {
+      "titel": "Tien procent korting",
+      "tekst": "Voor jou, op alles in mijn winkel. Vul de code in bij het afrekenen.",
+      "icoon": "ster",
+      "knop": { "aan": false, "label": "", "url": "" },
+      "code": { "aan": true, "label": "Jouw kortingscode", "waarde": "FEEST10" },
+      "afbeelding": ""
+    },
+    {
+      "titel": "Een gratis kennismaking",
+      "tekst": "Een halfuur samen kijken wat ik voor je kan betekenen. Plan het wanneer het jou uitkomt.",
+      "icoon": "hart",
+      "knop": { "aan": false, "label": "Plan een moment", "url": "" },
+      "code": { "aan": false, "label": "", "waarde": "" },
+      "afbeelding": ""
+    },
+    {
+      "titel": "Een verrassingsbonbon",
+      "tekst": "Een kleine zoete verrassing, de volgende keer dat we elkaar zien.",
+      "icoon": "ballon",
+      "knop": { "aan": false, "label": "", "url": "" },
+      "code": { "aan": false, "label": "", "waarde": "" },
+      "afbeelding": ""
+    },
+    {
+      "titel": "Een extra wens",
+      "tekst": "Bedenk iets leuks en laat het me weten. Binnen redelijke grenzen gaan we hem vervullen.",
+      "icoon": "cadeau",
+      "knop": { "aan": false, "label": "", "url": "" },
+      "code": { "aan": false, "label": "", "waarde": "" },
+      "afbeelding": ""
+    }
+  ]
+}
