@@ -1020,7 +1020,7 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
               <fieldset className="space-y-3 rounded-lg border border-slate-200 bg-white p-4">
                 <legend className="px-1 text-sm font-medium">Teksten op de pagina</legend>
                 <p className="text-xs text-slate-500">
-                  Laat een vak leeg voor de standaardtekst. Typ {'{aantal}'} voor het aantal cadeautjes dat de bezoeker mag openen en {'{over}'} voor het aantal dat hij nog mag openen.
+                  Laat een vak leeg voor de standaardtekst. Is er maar 1 cadeautje, dan staat er standaard "Open hieronder je cadeau.". Typ {'{aantal}'} voor het aantal cadeautjes dat de bezoeker mag openen en {'{over}'} voor het aantal dat hij nog mag openen.
                 </p>
                 {([
                   ['kies', 'Regel boven de cadeautjes', 'Kies 1 cadeautje om te openen.'],

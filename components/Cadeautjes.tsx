@@ -340,11 +340,11 @@ export default function Cadeautjes({ config, embed = false, preview = false, mar
             {/* Wat mag de bezoeker nog? Met bolletjes voor elk cadeautje dat hij mag openen */}
             <div className="mt-5 flex justify-center">
               <p className="inline-flex max-w-full items-center gap-3 rounded-full bg-opach/10 px-4 py-2 font-onder text-sm text-opach ring-1 ring-opach/20 sm:text-base" aria-live="polite">
-                <span className="flex shrink-0 gap-1.5" aria-hidden>
+                {aantal > 1 && <span className="flex shrink-0 gap-1.5" aria-hidden>
                   {Array.from({ length: config.aantalKiezen }, (_, i) => (
                     <span key={i} className={`block h-2.5 w-2.5 rounded-full transition-colors ${i < gekozen.length ? 'bg-goud' : 'ring-2 ring-goud/80'}`} />
                   ))}
-                </span>
+                </span>}
                 <span>{melding || kiezen}</span>
               </p>
             </div>

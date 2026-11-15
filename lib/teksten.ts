@@ -13,6 +13,8 @@ export function kiesTekst(config: CadeautjeConfig, geopend: number): string {
   const over = Math.max(0, aantal - geopend);
   if (over === 0) return klaarTekst(config);
   if (config.teksten.kies) return vul(config.teksten.kies, aantal, over);
+  // Is er maar een cadeautje, dan valt er niets te kiezen: de bezoeker mag het gewoon openen
+  if (config.aantalCadeautjes === 1) return 'Open hieronder je cadeau.';
   if (geopend === 0) return aantal === 1 ? 'Kies 1 cadeautje om te openen.' : `Kies er ${aantal} om te openen.`;
   return over === 1 ? 'Je mag nog 1 cadeautje openen.' : `Je mag nog ${over} cadeautjes openen.`;
 }
@@ -22,7 +24,7 @@ export function klaarTekst(config: CadeautjeConfig): string {
   const aantal = config.aantalKiezen;
   return config.teksten.klaar
     ? vul(config.teksten.klaar, aantal, 0)
-    : 'Je hebt gekozen. Veel plezier met je cadeautje!';
+    : config.aantalCadeautjes === 1 ? 'Veel plezier met je cadeau!' : 'Je hebt gekozen. Veel plezier met je cadeautje!';
 }
 
 export const knopTeksten = (config: CadeautjeConfig) => ({
