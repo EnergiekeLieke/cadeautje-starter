@@ -10,4 +10,5 @@ Eerste versie van de cadeautje-starter.
 - Drie vormen: een doos met strik, een paasei dat openbreekt (Pasen) en een koffer die opengaat (Vakantie).
 - Twaalf thema's voor het hele jaar, inclusief "Eigen huisstijl" met eigen kleuren, lettertypes, logo en achtergrond.
 - Beheerpagina met live voorbeeld, import en export (ook met Claude), embedcode en updates.
+- Bij een enkel cadeautje staat er "Open hieronder je cadeau." in plaats van een keuzetekst.
 - De gekozen cadeautjes worden alleen in de browser van de bezoeker onthouden.
