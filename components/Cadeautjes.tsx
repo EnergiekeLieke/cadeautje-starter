@@ -18,6 +18,19 @@ const SPATTERS = [
   { x: 84, y: 58, s: 12, d: 0.1 }, { x: 40, y: 8, s: 12, d: 0.4 }, { x: 62, y: 70, s: 10, d: 0.25 },
 ];
 
+// Waar de ronde sticker met het icoon op het cadeautje zit, per vorm
+const CHIP_PLEK: Record<CadeautjeConfig['opties']['vorm'], string> = {
+  doos: 'left-1/2 top-[68%]', ei: 'left-1/2 top-[62%]', koffer: 'left-1/2 top-[68%]', schoen: 'left-[36%] top-[71%]',
+};
+
+// De sticker op de schoen is kleiner, anders bedekt hij de hele schoen
+const CHIP_MAAT: Record<CadeautjeConfig['opties']['vorm'], { band: string; icoon: string }> = {
+  doos: { band: 'p-1.5 sm:p-2', icoon: 'h-4 w-4 sm:h-7 sm:w-7' },
+  ei: { band: 'p-1.5 sm:p-2', icoon: 'h-4 w-4 sm:h-7 sm:w-7' },
+  koffer: { band: 'p-1.5 sm:p-2', icoon: 'h-4 w-4 sm:h-7 sm:w-7' },
+  schoen: { band: 'p-1 sm:p-1.5', icoon: 'h-3 w-3 sm:h-5 sm:w-5' },
+};
+
 const KNOP_PILL = 'cad-deel rounded-full border border-goud/70 text-opach text-xs sm:text-sm px-4 py-2 hover:bg-goud/20 transition-colors focus-visible:outline-goud';
 
 // Breedte van een cadeautje per aantal cadeautjes: op de telefoon (mob) en vanaf 640 px (sm). Er staat een vaste tussenruimte van 0.75rem tussen,
@@ -390,10 +403,10 @@ export default function Cadeautjes({ config, embed = false, preview = false, mar
                       <span data-kleur={`tegel${tegelNr + 1} accent`} className="cad-deel cad-doos-dicht">
                         <Cadeaudoos papierKleur={t.bg} detailKleur={t.tekst} lintKleur={config.kleuren.accent} papier={opties.papier} verpakking={opties.verpakking} vorm={opties.vorm} />
                         <span
-                          className={`cad-chip absolute left-1/2 ${opties.vorm === 'ei' ? 'top-[62%]' : 'top-[68%]'} flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-licht p-1.5 shadow-md ring-2 ring-goud sm:p-2`}
+                          className={`cad-chip absolute ${CHIP_PLEK[opties.vorm]} flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-licht shadow-md ring-2 ring-goud ${CHIP_MAAT[opties.vorm].band}`}
                           style={{ color: leesbaar(config.kleuren.licht, [t.bg, config.kleuren.primair, config.kleuren.tekst]) }}
                         >
-                          <CadeauIcoon naam={icoon} className="h-4 w-4 sm:h-7 sm:w-7" />
+                          <CadeauIcoon naam={icoon} className={CHIP_MAAT[opties.vorm].icoon} />
                         </span>
                         {gedimd && <span className="absolute bottom-[10%] right-[12%] text-licht opacity-90 drop-shadow"><Slot /></span>}
                       </span>

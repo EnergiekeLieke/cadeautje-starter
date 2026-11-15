@@ -50,12 +50,14 @@ export default function Cadeaudoos({ papierKleur, detailKleur, lintKleur, papier
   const klipBoven = `kb${uniek}`;
   const klipOnder = `ko${uniek}`;
   const eiKlip = `ek${uniek}`;
+  const schoenKlip = `sk${uniek}`;
   const heeftLint = verpakking !== 'geen';
   const lintLicht = meng(lintKleur, '#ffffff', 0.35);
   const lintDonker = meng(lintKleur, '#000000', 0.28);
   const randLicht = meng(papierKleur, '#ffffff', 0.22);
   const randDonker = meng(papierKleur, '#000000', 0.3);
 
+  const SCHOEN = 'M22 42H58V60C58 64 62 66 68 65C80 63 94 68 94 78C94 85 90 88 84 88H26C21 88 18 85 18 80V46Q18 42 22 42Z';
   const EI = 'M50 8C28 8 14 44 14 64c0 18 16 29 36 29s36-11 36-29C86 44 72 8 50 8z';
   const ZIGZAG = 'L88 56L76 46L64 56L52 46L40 56L28 46L16 56L4 46L0 50Z';
   const ei = (
@@ -97,6 +99,7 @@ export default function Cadeaudoos({ papierKleur, detailKleur, lintKleur, papier
         <clipPath id={klipBoven}><path d={`M0 0H100V50${ZIGZAG}`} /></clipPath>
         <clipPath id={klipOnder}><path d={`M0 100H100V50${ZIGZAG}`} /></clipPath>
         <clipPath id={eiKlip}><path d={EI} /></clipPath>
+        <clipPath id={schoenKlip}><path d={SCHOEN} /></clipPath>
       </defs>
 
       {/* Schaduw op de grond */}
@@ -229,6 +232,61 @@ export default function Cadeaudoos({ papierKleur, detailKleur, lintKleur, papier
             )}
           </g>
         </>
+      )}
+
+      {/* Een schoentje met een cadeau erin: bij openen springt het cadeau eruit en verdwijnt de schoen */}
+      {vorm === 'schoen' && (
+        <g transform="translate(50 49) scale(1.08) translate(-56 -49)">
+          <g className="cad-body">
+            <path d={SCHOEN} fill={`url(#${licht})`} />
+            <path d={SCHOEN} fill={`url(#${donker})`} opacity="0.55" />
+            {papier !== 'geen' && <path d={SCHOEN} fill={`url(#${pat})`} opacity="0.32" />}
+            <g clipPath={`url(#${schoenKlip})`}>
+              {/* Zool, hak en de neus van de schoen */}
+              <rect x="0" y="82" width="100" height="9" fill={meng(papierKleur, '#000000', 0.55)} />
+              <rect x="0" y="82" width="100" height="1.600" fill="#fff" opacity="0.18" />
+              <rect x="18" y="73" width="23" height="10" fill={meng(papierKleur, '#000000', 0.3)} opacity="0.55" />
+              <path d="M80 64C89 65 94 70 94 78V82H84C84 74 82 68 80 64Z" fill={meng(papierKleur, '#000000', 0.18)} opacity="0.6" />
+              <rect x="22" y="52" width="4" height="20" rx="2" fill="#fff" opacity="0.2" />
+            </g>
+            {/* Veters */}
+            {heeftLint && (
+              <>
+                <path d="M59 61.500l4.500 2.500M64.500 64l4.500 1M70 65l4.500-1.800" stroke={lintKleur} strokeWidth="1.500" strokeLinecap="round" fill="none" />
+                {[[60.500, 62], [66, 64.500], [71.500, 65.200]].map(([x, y]) => <circle key={x} cx={x} cy={y} r="1.600" fill={lintLicht} stroke={lintDonker} strokeWidth="0.5" />)}
+              </>
+            )}
+            <path d={SCHOEN} fill="none" stroke={randDonker} strokeWidth="1" opacity="0.8" />
+            {/* De donkere binnenkant van de opening */}
+            <ellipse cx="38" cy="42.500" rx="18" ry="3.500" fill={meng(papierKleur, '#000000', 0.65)} />
+          </g>
+
+          {/* Het cadeau zit een beetje scheef in de schoen en steekt er voor twee derde uit */}
+          <g className="cad-lid">
+            <g transform="rotate(-9 38 44)">
+              <rect x="23" y="22" width="30" height="26" rx="3" fill={lintKleur} stroke={lintDonker} strokeWidth="1" />
+              <rect x="23" y="22" width="30" height="7" rx="3" fill={lintLicht} opacity="0.5" />
+              <rect x="35" y="22" width="6" height="26" fill="#fff" opacity="0.9" />
+              <rect x="23" y="32" width="30" height="5.500" fill="#fff" opacity="0.9" />
+              {verpakking === 'strik' && (
+                <g>
+                  <path d="M38 22C30 7 14 8 19 17c3 4 13 3 19 5z" fill="#fff" stroke={lintDonker} strokeWidth="1" strokeLinejoin="round" />
+                  <path d="M38 22c8-15 24-14 19-5-3 4-13 3-19 5z" fill="#fff" stroke={lintDonker} strokeWidth="1" strokeLinejoin="round" />
+                  <circle cx="38" cy="22" r="3.200" fill="#fff" stroke={lintDonker} strokeWidth="1" />
+                </g>
+              )}
+              {verpakking === 'ster' && (
+                <path d="M38 6l3.200 6.700 7.300.9-5.400 5 1.400 7.200-6.500-3.600-6.500 3.600 1.400-7.200-5.400-5 7.300-.9z" fill="#fff" stroke={lintDonker} strokeWidth="1" strokeLinejoin="round" />
+              )}
+            </g>
+          </g>
+
+          {/* De rand van de schoen, vóór het cadeau */}
+          <g className="cad-body">
+            <rect x="17" y="42" width="42" height="9" rx="3.500" fill={meng(papierKleur, '#ffffff', 0.5)} stroke={randDonker} strokeWidth="1" />
+            <rect x="20" y="44" width="36" height="1.800" rx="0.900" fill="#fff" opacity="0.5" />
+          </g>
+        </g>
       )}
     </svg>
   );

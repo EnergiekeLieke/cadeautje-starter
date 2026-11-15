@@ -11,7 +11,7 @@ import { BERICHT_CONFIG, BERICHT_KLAAR, BERICHT_MARKEER } from '@/components/Cad
 import standaardConfig from '@/config/cadeautje.json';
 import {
   cadeautjesVoor, DECOR_NAMEN, DECORS, ICONEN, PAPIER_NAMEN, PAPIEREN, VORM_NAMEN, VORMEN, SFEER_NAMEN, SFEREN, ICOON_NAMEN, kleurenGelijkAanThema, LETTERTYPE_PLEKKEN, LETTERTYPES, lettertypeVoor, leesConfig,
-  MAX_CADEAUTJES, THEMAS, THEMA_SLEUTELS, VERPAKKING_NAMEN, VERPAKKINGEN,
+  MAX_CADEAUTJES, SCHOEN_ZETTEN, THEMAS, THEMA_SLEUTELS, VERPAKKING_NAMEN, VERPAKKINGEN,
   type Cadeautje, type CadeautjeConfig, type Decor, type Papier, type Sfeer, type Vorm, type Lettertype, type LettertypePlek, type ThemaNaam, type Verpakking,
 } from '@/lib/config';
 import { deelBericht, deelTekst, STANDAARD_DEELTEKST } from '@/lib/delen';
@@ -338,6 +338,20 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
         ondertitel: c.ondertitel === oud.ondertitel || c.ondertitel === standaardConfig.ondertitel ? nieuw.ondertitel : c.ondertitel,
         kleuren: { ...nieuw.kleuren, tegels: [...nieuw.kleuren.tegels] },
         opties: { ...c.opties, decor: nieuw.decor, verpakking: nieuw.verpakking, papier: nieuw.papier, sfeer: nieuw.sfeer, vorm: nieuw.vorm },
+      };
+    });
+  }
+
+  // Sinterklaas: schoen zetten of pakjesavond. De titel en ondertitel gaan alleen mee als je ze nog niet zelf hebt aangepast.
+  function zetSchoenZetten(aan: boolean) {
+    setConfig((c) => {
+      const van = aan ? THEMAS.sint : SCHOEN_ZETTEN;
+      const naar = aan ? SCHOEN_ZETTEN : THEMAS.sint;
+      return {
+        ...c,
+        titel: c.titel === van.titel ? naar.titel : c.titel,
+        ondertitel: c.ondertitel === van.ondertitel ? naar.ondertitel : c.ondertitel,
+        opties: { ...c.opties, vorm: aan ? 'schoen' : 'doos' },
       };
     });
   }
@@ -947,6 +961,16 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
 
           {tab === 'Opties' && (
             <div className="space-y-6">
+              {config.thema === 'sint' && (
+                <label className="flex items-start gap-3 rounded-xl border-2 border-emerald-200 bg-emerald-50 p-4 text-sm">
+                  <input type="checkbox" checked={config.opties.vorm === 'schoen'} onChange={(e) => zetSchoenZetten(e.target.checked)} className="mt-0.5 h-4 w-4" />
+                  <span>
+                    <strong>Schoen zetten:</strong> toon de cadeautjes als schoentjes met een cadeau erin, in plaats van pakjes.
+                    <span className="mt-1 block text-xs text-slate-600">De titel en ondertitel wisselen mee, tenzij je ze zelf hebt aangepast. Je kunt de vorm ook los kiezen onder &quot;Vorm van de cadeautjes&quot;.</span>
+                  </span>
+                </label>
+              )}
+
               <fieldset className="space-y-3">
                 <legend className="mb-1 text-sm font-medium">Wat gebeurt er op de pagina?</legend>
                 {([
@@ -986,7 +1010,7 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
                     {VERPAKKINGEN.map((v) => <option key={v} value={v}>{VERPAKKING_NAMEN[v]}</option>)}
                   </select>
                 </Veld>
-                <Veld label="Vorm van de cadeautjes" hint="Een doos met strik, een paasei dat openbreekt of een koffer die opengaat. Een thema kiest een passende vorm.">
+                <Veld label="Vorm van de cadeautjes" hint="Een doos met strik, een paasei dat openbreekt, een koffer die opengaat of een schoentje met een cadeau erin. Een thema kiest een passende vorm.">
                   <select className={INPUT} value={config.opties.vorm} onChange={(e) => zetOptie('vorm', e.target.value as Vorm)}>
                     {VORMEN.map((v) => <option key={v} value={v}>{VORM_NAMEN[v]}</option>)}
                   </select>

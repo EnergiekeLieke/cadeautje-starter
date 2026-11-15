@@ -2,7 +2,7 @@
 
 Een speelse cadeautjespagina voor het hele jaar. Je klanten zien 1 tot 10 ingepakte cadeautjes en mogen er zelf een of meer uitkiezen om te openen. Wat erin zit bepaal jij: een tip, een korting, een kennismaking, een weggever of een link naar je aanbod. Je vult alles in via een eigen beheerpagina. Geen code nodig.
 
-Gebruik hem voor Sinterklaas, Kerst, een verjaardag, Pasen, Valentijn, Moederdag en Vaderdag, de zomer, Halloween, Nieuwjaar, als bedankje voor klanten, of met een kleurenset in je eigen huisstijl.
+Gebruik hem voor Sinterklaas (pakjesavond, of met een vinkje schoen zetten), Kerst, een verjaardag, Pasen, Valentijn, Moederdag en Vaderdag, de zomer, Halloween, Nieuwjaar, als bedankje voor klanten, of met een kleurenset in je eigen huisstijl.
 
 ## In 4 stappen live
 
@@ -30,7 +30,7 @@ Je ziet links de instellingen en rechts direct een voorbeeld.
 - **Algemeen**: titel, ondertitel, tekst onderaan, het **aantal cadeautjes** (1 tot 10, standaard 5) en **hoeveel de bezoeker er mag openen** (standaard 1), en de lettertypes (ook je eigen lettertype uploaden).
 - **Thema en kleuren**: kies een thema (Verjaardag, Sinterklaas, Kerst, Nieuwjaar, Valentijn, Pasen, Moederdag en Vaderdag, Zomer, Vakantie, Halloween, Bedankt of Eigen huisstijl). Een thema zet de kleuren, het decor, de verpakking en de icoontjes. Daarna pas je alles aan: vul je eigen kleurcodes in (zoals `#3b5633`), upload je logo, en zet eventueel een eigen achtergrondafbeelding achter de pagina of achter elk geopend cadeautje.
 - **Cadeautjes**: bepaal per cadeautje de titel en tekst, het icoon, een afbeelding, een **code met kopieerknop** (bijvoorbeeld een kortingscode) en een **knop met link** (bijvoorbeeld naar je webshop of een les in Kennis Shop).
-- **Opties**: confetti, zachte beweging, de knop "Opnieuw spelen", wel of niet laten zien wat er in de andere cadeautjes zat, het decor (sneeuw, hartjes, bloemen, ballonnen, sterretjes, herfstbladeren of zon), de verpakking (strik, lint, ster of alleen het icoon), het inpakpapier (stippen, strepen, sterretjes, hartjes en meer), een illustratie langs de rand van de kaart (vlaggetjes, besneeuwde dennen, daken met lichtjes, gras met bloemen, zee met zon of zachte heuvels), de knop **Deel met anderen** en alle vaste teksten op de pagina.
+- **Opties**: confetti, zachte beweging, de knop "Opnieuw spelen", wel of niet laten zien wat er in de andere cadeautjes zat, het decor (sneeuw, hartjes, bloemen, ballonnen, sterretjes, herfstbladeren of zon), de vorm (doos met strik, paasei, koffer of schoentje met een cadeau erin), de verpakking (strik, lint, ster of alleen het icoon), het inpakpapier (stippen, strepen, sterretjes, hartjes en meer), een illustratie langs de rand van de kaart (vlaggetjes, besneeuwde dennen, daken met lichtjes, gras met bloemen, zee met zon of zachte heuvels), de knop **Deel met anderen** en alle vaste teksten op de pagina.
 - **Delen**: je link, een kant-en-klare embedcode om te kopiëren en een korte controle voordat je de pagina deelt.
 
 Klik rechtsboven op **Opslaan** als je tevreden bent.

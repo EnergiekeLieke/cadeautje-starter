@@ -51,10 +51,10 @@ export const VERPAKKING_NAMEN: Record<Verpakking, string> = {
   strik: 'Strik bovenop', lint: 'Lint rondom', ster: 'Ster bovenop', geen: 'Alleen het icoon',
 };
 
-// De vorm van het cadeautje: een doos met strik, een paasei dat openbreekt of een koffer die opengaat
-export const VORMEN = ['doos', 'ei', 'koffer'] as const;
+// De vorm van het cadeautje: een doos met strik, een paasei dat openbreekt, een koffer die opengaat of een schoentje met een cadeau erin
+export const VORMEN = ['doos', 'ei', 'koffer', 'schoen'] as const;
 export type Vorm = (typeof VORMEN)[number];
-export const VORM_NAMEN: Record<Vorm, string> = { doos: 'Doos met strik', ei: 'Paasei', koffer: 'Koffer' };
+export const VORM_NAMEN: Record<Vorm, string> = { doos: 'Doos met strik', ei: 'Paasei', koffer: 'Koffer', schoen: 'Schoen met cadeau' };
 
 // Inpakpapier: het patroon op de doos
 export const PAPIEREN = ['stippen', 'strepen', 'sterren', 'hartjes', 'sneeuw', 'eitjes', 'golven', 'blaadjes', 'ruit', 'geen'] as const;
@@ -100,7 +100,7 @@ export const THEMAS = {
   },
   sint: {
     naam: 'Sinterklaas',
-    omschrijving: 'Pakjesavond in rood, blauw en goud',
+    omschrijving: 'Pakjesavond in rood, blauw en goud, met een vinkje voor schoen zetten',
     decor: 'sterren', verpakking: 'strik', iconen: ['schoen', 'cadeau', 'ster', 'hart'],
     papier: 'sterren', sfeer: 'daken',
     vorm: 'doos',
@@ -242,6 +242,9 @@ export const THEMAS = {
     },
   },
 } as const;
+
+/** Sinterklaas met het vinkje "Schoen zetten": de cadeautjes zijn schoentjes en de titel past daarbij. */
+export const SCHOEN_ZETTEN = { titel: 'Zet je schoen', ondertitel: 'Wat heeft de Sint er vannacht in gestopt?' } as const;
 
 export type ThemaNaam = keyof typeof THEMAS;
 export const THEMA_SLEUTELS = Object.keys(THEMAS) as ThemaNaam[];

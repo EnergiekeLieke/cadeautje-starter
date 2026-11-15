@@ -1,5 +1,9 @@
 # Wat is er nieuw
 
+## v1.1.0
+
+- Nieuwe vorm: een schoentje met een cadeau erin. Bij het thema Sinterklaas zet je het aan met het vinkje "Schoen zetten" bij Opties.
+
 ## v1.0.0
 
 Eerste versie van de cadeautje-starter.
