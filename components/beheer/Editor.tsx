@@ -589,7 +589,7 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
           <div role="tabpanel" id="tabpaneel" aria-labelledby={`tab-${TABS.indexOf(tab)}`}>
           {tab === 'Algemeen' && (
             <div className="space-y-4">
-              <Veld label="Titel van de pagina"><input className={INPUT} value={config.titel} maxLength={80} onChange={(e) => zet('titel', e.target.value)} /></Veld>
+              <Veld label="Titel van de pagina" hint={'Tip: schrijf {voornaam} in je tekst, bijvoorbeeld "Hey {voornaam}!". Komt je bezoeker via een link met ?voornaam=Lieke, dan staat daar Lieke. Zonder naam blijft er gewoon "Hey!" staan.'}><input className={INPUT} value={config.titel} maxLength={80} onChange={(e) => zet('titel', e.target.value)} /></Veld>
               <Veld label="Ondertitel"><input className={INPUT} value={config.ondertitel} maxLength={120} onChange={(e) => zet('ondertitel', e.target.value)} /></Veld>
               <Veld label="Tekst onderaan"><input className={INPUT} value={config.footer} maxLength={200} onChange={(e) => zet('footer', e.target.value)} /></Veld>
               <div className="grid gap-4 rounded-lg border border-slate-200 bg-white p-4 sm:grid-cols-2">

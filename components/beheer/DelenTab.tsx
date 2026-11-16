@@ -97,6 +97,10 @@ export default function DelenTab({ config, gewijzigd, voorbeeldCadeautjes, voorb
           Plak de embedcode in een html-blok. Is het iframe te laag, dan moet je klant in het iframe scrollen.
           Is het te hoog, dan blijft er lege ruimte onder de pagina. Vul hieronder in hoe breed je iframe ongeveer is, dan reken ik de hoogte uit.
         </p>
+        <p className="text-xs text-slate-600">
+          Wil je je bezoekers met hun voornaam begroeten? Zet {'{voornaam}'} in je teksten en plak <code>&amp;voornaam=Lieke</code> achter het adres in de embedcode.
+          Gebruik je een mailprogramma, vul dan daar de plaatshouder voor de voornaam in (bij ActiveCampaign is dat <code>%FIRSTNAME%</code>).
+        </p>
         <Veld label="Breedte van je iframe in pixels" hint="Meestal 450 tot 600. Is de kolom waarin je pagina staat breder, vul dan die breedte in.">
           <input
             type="number"

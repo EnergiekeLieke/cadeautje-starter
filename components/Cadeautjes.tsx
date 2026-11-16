@@ -12,6 +12,7 @@ import { cadeautjesVoor, icoonVoor, type CadeautjeConfig } from '@/lib/config';
 import { kopieerNaarKlembord } from '@/lib/delen';
 import { confettiKleuren, cssVariabelen, heeftAchtergrondAfbeelding, heeftPopupAchtergrond, leesbaar, tegelKleuren } from '@/lib/kleur';
 import { kiesTekst, knopTeksten } from '@/lib/teksten';
+import { metVoornaam } from '@/lib/voornaam';
 
 const SPATTERS = [
   { x: 22, y: 30, s: 14, d: 0 }, { x: 74, y: 22, s: 18, d: 0.15 }, { x: 14, y: 62, s: 10, d: 0.3 },
@@ -93,9 +94,14 @@ interface Props {
   preview?: boolean;
   /** Voorbeeld in de editor: de kleur (bijvoorbeeld 'primair' of 'tegel2') waarvan we de onderdelen laten oplichten */
   markeer?: string | null;
+  /** De voornaam uit de link (?voornaam=): overal waar de beheerder {voornaam} schrijft, komt die naam te staan */
+  voornaam?: string;
 }
 
-export default function Cadeautjes({ config, embed = false, preview = false, markeer = null }: Props) {
+export default function Cadeautjes({ config: ruweConfig, embed = false, preview = false, markeer = null, voornaam = '' }: Props) {
+  // De naam vullen we alleen in bij het tonen. De vingerafdruk (welke cadeautjes zijn geopend) komt uit de ruwe instellingen,
+  // zodat de status gelijk blijft, ook als de naam in de link verandert of ontbreekt.
+  const config = useMemo(() => metVoornaam(ruweConfig, voornaam), [ruweConfig, voornaam]);
   const [beweging, setBeweging] = useState(true);
   const [geopend, setGeopend] = useState<number[]>([]);
   const [actief, setActief] = useState<number | null>(null);
@@ -122,7 +128,7 @@ export default function Cadeautjes({ config, embed = false, preview = false, mar
   const tegels = useMemo(() => tegelKleuren(config.kleuren), [config.kleuren]);
   const confettiSet = useMemo(() => confettiKleuren(config.kleuren), [config.kleuren]);
   const variabelen = useMemo(() => cssVariabelen(config) as React.CSSProperties, [config]);
-  const sleutel = useMemo(() => vingerafdruk(config), [config]);
+  const sleutel = useMemo(() => vingerafdruk(ruweConfig), [ruweConfig]);
   const teksten = knopTeksten(config);
   const achtergrondAfbeelding = heeftAchtergrondAfbeelding(opties);
   const bovenSfeer = !achtergrondAfbeelding && heeftBovenkant(opties.sfeer);

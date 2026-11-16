@@ -15,9 +15,11 @@ interface Props {
   embed: boolean;
   /** Voorbeeldmodus: ontvangt live instellingen van de editor in plaats van de opgeslagen versie */
   preview: boolean;
+  /** De voornaam uit de link (?voornaam=), al schoongemaakt */
+  voornaam?: string;
 }
 
-export default function CadeautjesPagina({ config, embed, preview }: Props) {
+export default function CadeautjesPagina({ config, embed, preview, voornaam = '' }: Props) {
   const [actueel, setActueel] = useState(config);
   const [markeer, setMarkeer] = useState<string | null>(null);
 
@@ -42,5 +44,5 @@ export default function CadeautjesPagina({ config, embed, preview }: Props) {
     return () => window.removeEventListener('message', opBericht);
   }, [preview]);
 
-  return <Cadeautjes config={actueel} embed={embed} preview={preview} markeer={markeer} />;
+  return <Cadeautjes config={actueel} embed={embed} preview={preview} markeer={markeer} voornaam={voornaam} />;
 }

@@ -1,5 +1,9 @@
 # Wat is er nieuw
 
+## v1.2.0
+
+- Persoonlijke begroeting: schrijf `{voornaam}` in een tekst, bijvoorbeeld "Hey {voornaam}!". Komt je bezoeker via een link met `?voornaam=Lieke` (bijvoorbeeld uit een mail), dan staat daar Lieke. Zonder naam blijft er "Hey!" staan. Het werkt in de titel, de ondertitel, de tekst onderaan, de knoppen en in de titels en teksten van de cadeautjes. In het voorbeeld van de beheerpagina zie je "Voornaam", zodat je ziet waar de naam komt.
+
 ## v1.1.0
 
 - Nieuwe vorm: een schoentje met een cadeau erin. Bij het thema Sinterklaas zet je het aan met het vinkje "Schoen zetten" bij Opties.
