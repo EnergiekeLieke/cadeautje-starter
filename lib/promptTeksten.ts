@@ -15,7 +15,7 @@ Regels voor de tekst:
 - Schrijf in het Nederlands, in de jij-vorm.
 - Gebruik geen lange streepjes. Gebruik een dubbele punt, een komma of twee zinnen.
 - Titel van een cadeautje: maximaal 80 tekens. Tekst: maximaal 600 tekens.
-- Alleen gewone tekst, geen HTML en geen opmaakcodes.
+- Gebruik geen HTML. Opmaak mag spaarzaam, alleen in het veld "tekst": **vet**, *cursief* en ++onderstreept++.
 - Links moeten met https:// beginnen. Verzin geen links: laat "url" leeg en zet "aan" op false als je de link niet weet.
 - Verzin geen kortingscodes: laat "waarde" leeg en zet "aan" op false als ik de code niet heb gegeven.
 

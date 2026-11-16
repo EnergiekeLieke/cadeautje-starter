@@ -12,6 +12,7 @@ import { cadeautjesVoor, icoonVoor, type CadeautjeConfig } from '@/lib/config';
 import { kopieerNaarKlembord } from '@/lib/delen';
 import { confettiKleuren, cssVariabelen, heeftAchtergrondAfbeelding, heeftPopupAchtergrond, leesbaar, tegelKleuren } from '@/lib/kleur';
 import { kiesTekst, knopTeksten } from '@/lib/teksten';
+import { maakOpmaak, zonderOpmaak } from '@/lib/opmaak';
 import { metVoornaam } from '@/lib/voornaam';
 
 const SPATTERS = [
@@ -490,7 +491,7 @@ export default function Cadeautjes({ config: ruweConfig, embed = false, preview 
                     <CadeauIcoon naam={inhoudIcoon} className="h-11 w-11" />
                   </div>
                   <h2 data-kleur="primair" className="cad-deel cad-ptekst mt-4 font-popkop text-2xl font-bold text-primair">{inhoud.titel}</h2>
-                  {inhoud.tekst && <p data-kleur="tekst" className={`cad-deel cad-ptekst mt-3 whitespace-pre-line leading-relaxed text-inkt ${inhoud.tekst.length > 180 ? 'text-left' : ''}`}>{inhoud.tekst}</p>}
+                  {inhoud.tekst && <p data-kleur="tekst" className={`cad-deel cad-ptekst mt-3 whitespace-pre-line leading-relaxed text-inkt ${zonderOpmaak(inhoud.tekst).length > 180 ? 'text-left' : ''}`}>{maakOpmaak(inhoud.tekst)}</p>}
                   {inhoud.afbeelding && (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={inhoud.afbeelding} alt="" className="mx-auto mt-4 max-h-56 w-auto max-w-full rounded-xl object-cover" />

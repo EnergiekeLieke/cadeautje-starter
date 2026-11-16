@@ -19,6 +19,7 @@ import { achtergrondMaten, POPUP_ACHTERGROND_MAAT } from '@/lib/embed';
 import { contrast, heeftAchtergrondAfbeelding, heeftPopupAchtergrond } from '@/lib/kleur';
 import type { OpslagModus } from '@/lib/opslag';
 import { PROMPT_TEKSTEN } from '@/lib/promptTeksten';
+import OpmaakVeld from '@/components/beheer/OpmaakVeld';
 import type { VersieInfo } from '@/lib/versie';
 
 const TABS = ['Algemeen', 'Thema en kleuren', 'Cadeautjes', 'Opties', 'Delen', 'Updates', 'Importeren'] as const;
@@ -898,9 +899,7 @@ export default function Editor({ beginConfig, modus, versie: beginVersie }: { be
                     </summary>
                     <div className="space-y-3 border-t border-slate-200 p-3">
                       <Veld label="Titel"><input className={INPUT} value={c.titel} maxLength={80} onChange={(e) => wijzigCadeautje(i, { titel: e.target.value })} /></Veld>
-                      <Veld label="Tekst" hint={`${c.tekst.length} van 1500 tekens`}>
-                        <textarea className={INPUT} rows={4} value={c.tekst} maxLength={1500} onChange={(e) => wijzigCadeautje(i, { tekst: e.target.value })} />
-                      </Veld>
+                      <OpmaakVeld label="Tekst" hint={`${c.tekst.length} van 1500 tekens`} value={c.tekst} maxLength={1500} onChange={(tekst) => wijzigCadeautje(i, { tekst })} />
                       <Veld label="Icoon" hint="Automatisch kiest een icoon dat bij je thema past.">
                         <div className="flex items-center gap-3">
                           <select className={INPUT} value={c.icoon} onChange={(e) => wijzigCadeautje(i, { icoon: e.target.value as Cadeautje['icoon'] })}>

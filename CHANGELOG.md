@@ -1,5 +1,11 @@
 # Wat is er nieuw
 
+## v1.3.0
+
+- Opmaak in de tekst van een cadeautje: maak woorden **vet**, *cursief* of onderstreept. Selecteer de tekst in de beheerpagina en klik op de knop **B**, **I** of **U** (of gebruik Ctrl+B, Ctrl+I en Ctrl+U). Klik nog een keer om de opmaak weer weg te halen. Je ziet het meteen in het voorbeeld.
+- Onder de motorkap staan er tekens om de tekst: `**vet**`, `*cursief*` en `++onderstreept++`. Die zie je op de pagina zelf niet. Typ je zo'n teken met de hand, dan werkt het ook. Een los sterretje, bijvoorbeeld bij een voetnoot, blijft gewoon staan.
+- De prompt voor Claude (bij Importeren en exporteren) weet dat Claude de tekst spaarzaam mag opmaken.
+
 ## v1.2.0
 
 - Persoonlijke begroeting: schrijf `{voornaam}` in een tekst, bijvoorbeeld "Hey {voornaam}!". Komt je bezoeker via een link met `?voornaam=Lieke` (bijvoorbeeld uit een mail), dan staat daar Lieke. Zonder naam blijft er "Hey!" staan. Het werkt in de titel, de ondertitel, de tekst onderaan, de knoppen en in de titels en teksten van de cadeautjes. In het voorbeeld van de beheerpagina zie je "Voornaam", zodat je ziet waar de naam komt.
